@@ -1,3 +1,4 @@
 class Helper {
-  /// Add formatters
+  static bool isNotNullAndNotEmpty(String? value) =>
+      value != null && value.isNotEmpty;
 }

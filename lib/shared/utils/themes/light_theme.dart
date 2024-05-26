@@ -1,25 +1,18 @@
 import 'package:flutter/material.dart';
 
-const kPrimaryColor = Color(0xFF8760FB);
-const kSecondaryColor = Color(0xFFDED3FF);
-const kTertiaryColor = Color(0xFFBBA6FA);
-const kQuarternaryColor = Color.fromARGB(255, 90, 8, 85);
-const kLiveAccountColor = Color(0xFFEB6F33);
-const kPammAccountColor = Color.fromARGB(255, 255, 180, 142);
-const kDemoAccountColor = Color.fromARGB(255, 51, 195, 235);
+const kPrimaryColor = Color.fromARGB(255, 96, 191, 251);
+const kSecondaryColor = Color.fromARGB(255, 211, 248, 255);
 const kColorsurfaceCanvas = Color(0xFFF6F6FB);
 const Color kColorBodyText = Colors.black;
 const Color kColorDisplayText = Color(0xFF334151);
-const Color kGreyShadeLight = Color.fromARGB(39, 203, 203, 203);
+const Color kGreyShadeLight = Color.fromARGB(255, 210, 209, 209);
 const Color kGreyShade = Color.fromARGB(255, 203, 203, 203);
 const Color kGreyShade1 = Color.fromARGB(255, 176, 175, 175);
 const Color kGreyShade2 = Color.fromARGB(255, 143, 142, 142);
 const Color kGreyShade3 = Color.fromARGB(255, 88, 88, 88);
 const Color kGreyShade4 = Color.fromARGB(255, 58, 58, 58);
-const Color kGreyShade5 = Color.fromARGB(255, 210, 209, 209);
 
 const Color kBackgroundColor = Color(0xFFD6D6E6);
-const Color kDrawerBackgroundColor = Color.fromARGB(255, 238, 238, 245);
 
 const kPrimaryFont = 'Montserrat';
 
@@ -54,7 +47,7 @@ ThemeData get kAppLightTheme {
       textColor: kColorDisplayText,
     ),
     switchTheme: buildSwitchTheme(),
-    dividerTheme: const DividerThemeData(color: kGreyShade5),
+    dividerTheme: const DividerThemeData(color: kGreyShadeLight),
     expansionTileTheme: const ExpansionTileThemeData(
       backgroundColor: Colors.transparent,
       collapsedBackgroundColor: Colors.transparent,
@@ -245,7 +238,7 @@ buildSwitchTheme() {
     trackOutlineColor: MaterialStateProperty.resolveWith<Color?>(
       (Set<MaterialState> states) {
         if (!states.contains(MaterialState.selected)) {
-          return kGreyShade5;
+          return kGreyShadeLight;
         }
         return kSecondaryColor;
       },
@@ -253,7 +246,7 @@ buildSwitchTheme() {
     trackColor: MaterialStateProperty.resolveWith<Color?>(
       (Set<MaterialState> states) {
         if (!states.contains(MaterialState.selected)) {
-          return kGreyShade5;
+          return kGreyShadeLight;
         }
         return kSecondaryColor;
       },

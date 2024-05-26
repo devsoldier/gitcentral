@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 
 final baseOption = BaseOptions(
   followRedirects: false,
-  headers: {},
   validateStatus: (status) {
     return int.parse(status.toString()) <= 500;
   },
