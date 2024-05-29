@@ -17,8 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$GitHubAuthState {
   GitHubAuthStatus? get status => throw _privateConstructorUsedError;
-  String? get code => throw _privateConstructorUsedError;
-  String? get accessToken => throw _privateConstructorUsedError;
+  String? get errorMessage => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $GitHubAuthStateCopyWith<GitHubAuthState> get copyWith =>
@@ -31,7 +30,7 @@ abstract class $GitHubAuthStateCopyWith<$Res> {
           GitHubAuthState value, $Res Function(GitHubAuthState) then) =
       _$GitHubAuthStateCopyWithImpl<$Res, GitHubAuthState>;
   @useResult
-  $Res call({GitHubAuthStatus? status, String? code, String? accessToken});
+  $Res call({GitHubAuthStatus? status, String? errorMessage});
 
   $GitHubAuthStatusCopyWith<$Res>? get status;
 }
@@ -50,21 +49,16 @@ class _$GitHubAuthStateCopyWithImpl<$Res, $Val extends GitHubAuthState>
   @override
   $Res call({
     Object? status = freezed,
-    Object? code = freezed,
-    Object? accessToken = freezed,
+    Object? errorMessage = freezed,
   }) {
     return _then(_value.copyWith(
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as GitHubAuthStatus?,
-      code: freezed == code
-          ? _value.code
-          : code // ignore: cast_nullable_to_non_nullable
-              as String?,
-      accessToken: freezed == accessToken
-          ? _value.accessToken
-          : accessToken // ignore: cast_nullable_to_non_nullable
+      errorMessage: freezed == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
   }
@@ -90,7 +84,7 @@ abstract class _$$GitHubAuthStateImplCopyWith<$Res>
       __$$GitHubAuthStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({GitHubAuthStatus? status, String? code, String? accessToken});
+  $Res call({GitHubAuthStatus? status, String? errorMessage});
 
   @override
   $GitHubAuthStatusCopyWith<$Res>? get status;
@@ -108,21 +102,16 @@ class __$$GitHubAuthStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = freezed,
-    Object? code = freezed,
-    Object? accessToken = freezed,
+    Object? errorMessage = freezed,
   }) {
     return _then(_$GitHubAuthStateImpl(
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as GitHubAuthStatus?,
-      code: freezed == code
-          ? _value.code
-          : code // ignore: cast_nullable_to_non_nullable
-              as String?,
-      accessToken: freezed == accessToken
-          ? _value.accessToken
-          : accessToken // ignore: cast_nullable_to_non_nullable
+      errorMessage: freezed == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -132,21 +121,17 @@ class __$$GitHubAuthStateImplCopyWithImpl<$Res>
 
 class _$GitHubAuthStateImpl implements _GitHubAuthState {
   _$GitHubAuthStateImpl(
-      {this.status = const GitHubAuthStatus.loading(),
-      this.code,
-      this.accessToken});
+      {this.status = const GitHubAuthStatus.initial(), this.errorMessage});
 
   @override
   @JsonKey()
   final GitHubAuthStatus? status;
   @override
-  final String? code;
-  @override
-  final String? accessToken;
+  final String? errorMessage;
 
   @override
   String toString() {
-    return 'GitHubAuthState(status: $status, code: $code, accessToken: $accessToken)';
+    return 'GitHubAuthState(status: $status, errorMessage: $errorMessage)';
   }
 
   @override
@@ -155,13 +140,12 @@ class _$GitHubAuthStateImpl implements _GitHubAuthState {
         (other.runtimeType == runtimeType &&
             other is _$GitHubAuthStateImpl &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.code, code) || other.code == code) &&
-            (identical(other.accessToken, accessToken) ||
-                other.accessToken == accessToken));
+            (identical(other.errorMessage, errorMessage) ||
+                other.errorMessage == errorMessage));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, status, code, accessToken);
+  int get hashCode => Object.hash(runtimeType, status, errorMessage);
 
   @JsonKey(ignore: true)
   @override
@@ -174,15 +158,12 @@ class _$GitHubAuthStateImpl implements _GitHubAuthState {
 abstract class _GitHubAuthState implements GitHubAuthState {
   factory _GitHubAuthState(
       {final GitHubAuthStatus? status,
-      final String? code,
-      final String? accessToken}) = _$GitHubAuthStateImpl;
+      final String? errorMessage}) = _$GitHubAuthStateImpl;
 
   @override
   GitHubAuthStatus? get status;
   @override
-  String? get code;
-  @override
-  String? get accessToken;
+  String? get errorMessage;
   @override
   @JsonKey(ignore: true)
   _$$GitHubAuthStateImplCopyWith<_$GitHubAuthStateImpl> get copyWith =>
@@ -193,24 +174,30 @@ abstract class _GitHubAuthState implements GitHubAuthState {
 mixin _$GitHubAuthStatus {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() loaded,
+    required TResult Function() loggedIn,
+    required TResult Function() loggedOut,
     required TResult Function() serverError,
     required TResult Function() otherException,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? loaded,
+    TResult? Function()? loggedIn,
+    TResult? Function()? loggedOut,
     TResult? Function()? serverError,
     TResult? Function()? otherException,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? loaded,
+    TResult Function()? loggedIn,
+    TResult Function()? loggedOut,
     TResult Function()? serverError,
     TResult Function()? otherException,
     required TResult orElse(),
@@ -218,24 +205,30 @@ mixin _$GitHubAuthStatus {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(GitHubAuthInitial value) initial,
     required TResult Function(GitHubAuthLoading value) loading,
-    required TResult Function(GitHubAuthLoaded value) loaded,
+    required TResult Function(GitHubAuthLoggedIn value) loggedIn,
+    required TResult Function(GitHubAuthLoggedOut value) loggedOut,
     required TResult Function(GitHubAuthServerError value) serverError,
     required TResult Function(GitHubAuthOtherException value) otherException,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(GitHubAuthInitial value)? initial,
     TResult? Function(GitHubAuthLoading value)? loading,
-    TResult? Function(GitHubAuthLoaded value)? loaded,
+    TResult? Function(GitHubAuthLoggedIn value)? loggedIn,
+    TResult? Function(GitHubAuthLoggedOut value)? loggedOut,
     TResult? Function(GitHubAuthServerError value)? serverError,
     TResult? Function(GitHubAuthOtherException value)? otherException,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(GitHubAuthInitial value)? initial,
     TResult Function(GitHubAuthLoading value)? loading,
-    TResult Function(GitHubAuthLoaded value)? loaded,
+    TResult Function(GitHubAuthLoggedIn value)? loggedIn,
+    TResult Function(GitHubAuthLoggedOut value)? loggedOut,
     TResult Function(GitHubAuthServerError value)? serverError,
     TResult Function(GitHubAuthOtherException value)? otherException,
     required TResult orElse(),
@@ -259,6 +252,132 @@ class _$GitHubAuthStatusCopyWithImpl<$Res, $Val extends GitHubAuthStatus>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+}
+
+/// @nodoc
+abstract class _$$GitHubAuthInitialImplCopyWith<$Res> {
+  factory _$$GitHubAuthInitialImplCopyWith(_$GitHubAuthInitialImpl value,
+          $Res Function(_$GitHubAuthInitialImpl) then) =
+      __$$GitHubAuthInitialImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$GitHubAuthInitialImplCopyWithImpl<$Res>
+    extends _$GitHubAuthStatusCopyWithImpl<$Res, _$GitHubAuthInitialImpl>
+    implements _$$GitHubAuthInitialImplCopyWith<$Res> {
+  __$$GitHubAuthInitialImplCopyWithImpl(_$GitHubAuthInitialImpl _value,
+      $Res Function(_$GitHubAuthInitialImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$GitHubAuthInitialImpl implements GitHubAuthInitial {
+  const _$GitHubAuthInitialImpl();
+
+  @override
+  String toString() {
+    return 'GitHubAuthStatus.initial()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$GitHubAuthInitialImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function() loggedIn,
+    required TResult Function() loggedOut,
+    required TResult Function() serverError,
+    required TResult Function() otherException,
+  }) {
+    return initial();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function()? loggedIn,
+    TResult? Function()? loggedOut,
+    TResult? Function()? serverError,
+    TResult? Function()? otherException,
+  }) {
+    return initial?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function()? loggedIn,
+    TResult Function()? loggedOut,
+    TResult Function()? serverError,
+    TResult Function()? otherException,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(GitHubAuthInitial value) initial,
+    required TResult Function(GitHubAuthLoading value) loading,
+    required TResult Function(GitHubAuthLoggedIn value) loggedIn,
+    required TResult Function(GitHubAuthLoggedOut value) loggedOut,
+    required TResult Function(GitHubAuthServerError value) serverError,
+    required TResult Function(GitHubAuthOtherException value) otherException,
+  }) {
+    return initial(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(GitHubAuthInitial value)? initial,
+    TResult? Function(GitHubAuthLoading value)? loading,
+    TResult? Function(GitHubAuthLoggedIn value)? loggedIn,
+    TResult? Function(GitHubAuthLoggedOut value)? loggedOut,
+    TResult? Function(GitHubAuthServerError value)? serverError,
+    TResult? Function(GitHubAuthOtherException value)? otherException,
+  }) {
+    return initial?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(GitHubAuthInitial value)? initial,
+    TResult Function(GitHubAuthLoading value)? loading,
+    TResult Function(GitHubAuthLoggedIn value)? loggedIn,
+    TResult Function(GitHubAuthLoggedOut value)? loggedOut,
+    TResult Function(GitHubAuthServerError value)? serverError,
+    TResult Function(GitHubAuthOtherException value)? otherException,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class GitHubAuthInitial implements GitHubAuthStatus {
+  const factory GitHubAuthInitial() = _$GitHubAuthInitialImpl;
 }
 
 /// @nodoc
@@ -299,8 +418,10 @@ class _$GitHubAuthLoadingImpl implements GitHubAuthLoading {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() loaded,
+    required TResult Function() loggedIn,
+    required TResult Function() loggedOut,
     required TResult Function() serverError,
     required TResult Function() otherException,
   }) {
@@ -310,8 +431,10 @@ class _$GitHubAuthLoadingImpl implements GitHubAuthLoading {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? loaded,
+    TResult? Function()? loggedIn,
+    TResult? Function()? loggedOut,
     TResult? Function()? serverError,
     TResult? Function()? otherException,
   }) {
@@ -321,8 +444,10 @@ class _$GitHubAuthLoadingImpl implements GitHubAuthLoading {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? loaded,
+    TResult Function()? loggedIn,
+    TResult Function()? loggedOut,
     TResult Function()? serverError,
     TResult Function()? otherException,
     required TResult orElse(),
@@ -336,8 +461,10 @@ class _$GitHubAuthLoadingImpl implements GitHubAuthLoading {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(GitHubAuthInitial value) initial,
     required TResult Function(GitHubAuthLoading value) loading,
-    required TResult Function(GitHubAuthLoaded value) loaded,
+    required TResult Function(GitHubAuthLoggedIn value) loggedIn,
+    required TResult Function(GitHubAuthLoggedOut value) loggedOut,
     required TResult Function(GitHubAuthServerError value) serverError,
     required TResult Function(GitHubAuthOtherException value) otherException,
   }) {
@@ -347,8 +474,10 @@ class _$GitHubAuthLoadingImpl implements GitHubAuthLoading {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(GitHubAuthInitial value)? initial,
     TResult? Function(GitHubAuthLoading value)? loading,
-    TResult? Function(GitHubAuthLoaded value)? loaded,
+    TResult? Function(GitHubAuthLoggedIn value)? loggedIn,
+    TResult? Function(GitHubAuthLoggedOut value)? loggedOut,
     TResult? Function(GitHubAuthServerError value)? serverError,
     TResult? Function(GitHubAuthOtherException value)? otherException,
   }) {
@@ -358,8 +487,10 @@ class _$GitHubAuthLoadingImpl implements GitHubAuthLoading {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(GitHubAuthInitial value)? initial,
     TResult Function(GitHubAuthLoading value)? loading,
-    TResult Function(GitHubAuthLoaded value)? loaded,
+    TResult Function(GitHubAuthLoggedIn value)? loggedIn,
+    TResult Function(GitHubAuthLoggedOut value)? loggedOut,
     TResult Function(GitHubAuthServerError value)? serverError,
     TResult Function(GitHubAuthOtherException value)? otherException,
     required TResult orElse(),
@@ -376,35 +507,35 @@ abstract class GitHubAuthLoading implements GitHubAuthStatus {
 }
 
 /// @nodoc
-abstract class _$$GitHubAuthLoadedImplCopyWith<$Res> {
-  factory _$$GitHubAuthLoadedImplCopyWith(_$GitHubAuthLoadedImpl value,
-          $Res Function(_$GitHubAuthLoadedImpl) then) =
-      __$$GitHubAuthLoadedImplCopyWithImpl<$Res>;
+abstract class _$$GitHubAuthLoggedInImplCopyWith<$Res> {
+  factory _$$GitHubAuthLoggedInImplCopyWith(_$GitHubAuthLoggedInImpl value,
+          $Res Function(_$GitHubAuthLoggedInImpl) then) =
+      __$$GitHubAuthLoggedInImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$GitHubAuthLoadedImplCopyWithImpl<$Res>
-    extends _$GitHubAuthStatusCopyWithImpl<$Res, _$GitHubAuthLoadedImpl>
-    implements _$$GitHubAuthLoadedImplCopyWith<$Res> {
-  __$$GitHubAuthLoadedImplCopyWithImpl(_$GitHubAuthLoadedImpl _value,
-      $Res Function(_$GitHubAuthLoadedImpl) _then)
+class __$$GitHubAuthLoggedInImplCopyWithImpl<$Res>
+    extends _$GitHubAuthStatusCopyWithImpl<$Res, _$GitHubAuthLoggedInImpl>
+    implements _$$GitHubAuthLoggedInImplCopyWith<$Res> {
+  __$$GitHubAuthLoggedInImplCopyWithImpl(_$GitHubAuthLoggedInImpl _value,
+      $Res Function(_$GitHubAuthLoggedInImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$GitHubAuthLoadedImpl implements GitHubAuthLoaded {
-  const _$GitHubAuthLoadedImpl();
+class _$GitHubAuthLoggedInImpl implements GitHubAuthLoggedIn {
+  const _$GitHubAuthLoggedInImpl();
 
   @override
   String toString() {
-    return 'GitHubAuthStatus.loaded()';
+    return 'GitHubAuthStatus.loggedIn()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$GitHubAuthLoadedImpl);
+        (other.runtimeType == runtimeType && other is _$GitHubAuthLoggedInImpl);
   }
 
   @override
@@ -413,36 +544,42 @@ class _$GitHubAuthLoadedImpl implements GitHubAuthLoaded {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() loaded,
+    required TResult Function() loggedIn,
+    required TResult Function() loggedOut,
     required TResult Function() serverError,
     required TResult Function() otherException,
   }) {
-    return loaded();
+    return loggedIn();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? loaded,
+    TResult? Function()? loggedIn,
+    TResult? Function()? loggedOut,
     TResult? Function()? serverError,
     TResult? Function()? otherException,
   }) {
-    return loaded?.call();
+    return loggedIn?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? loaded,
+    TResult Function()? loggedIn,
+    TResult Function()? loggedOut,
     TResult Function()? serverError,
     TResult Function()? otherException,
     required TResult orElse(),
   }) {
-    if (loaded != null) {
-      return loaded();
+    if (loggedIn != null) {
+      return loggedIn();
     }
     return orElse();
   }
@@ -450,43 +587,176 @@ class _$GitHubAuthLoadedImpl implements GitHubAuthLoaded {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(GitHubAuthInitial value) initial,
     required TResult Function(GitHubAuthLoading value) loading,
-    required TResult Function(GitHubAuthLoaded value) loaded,
+    required TResult Function(GitHubAuthLoggedIn value) loggedIn,
+    required TResult Function(GitHubAuthLoggedOut value) loggedOut,
     required TResult Function(GitHubAuthServerError value) serverError,
     required TResult Function(GitHubAuthOtherException value) otherException,
   }) {
-    return loaded(this);
+    return loggedIn(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(GitHubAuthInitial value)? initial,
     TResult? Function(GitHubAuthLoading value)? loading,
-    TResult? Function(GitHubAuthLoaded value)? loaded,
+    TResult? Function(GitHubAuthLoggedIn value)? loggedIn,
+    TResult? Function(GitHubAuthLoggedOut value)? loggedOut,
     TResult? Function(GitHubAuthServerError value)? serverError,
     TResult? Function(GitHubAuthOtherException value)? otherException,
   }) {
-    return loaded?.call(this);
+    return loggedIn?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(GitHubAuthInitial value)? initial,
     TResult Function(GitHubAuthLoading value)? loading,
-    TResult Function(GitHubAuthLoaded value)? loaded,
+    TResult Function(GitHubAuthLoggedIn value)? loggedIn,
+    TResult Function(GitHubAuthLoggedOut value)? loggedOut,
     TResult Function(GitHubAuthServerError value)? serverError,
     TResult Function(GitHubAuthOtherException value)? otherException,
     required TResult orElse(),
   }) {
-    if (loaded != null) {
-      return loaded(this);
+    if (loggedIn != null) {
+      return loggedIn(this);
     }
     return orElse();
   }
 }
 
-abstract class GitHubAuthLoaded implements GitHubAuthStatus {
-  const factory GitHubAuthLoaded() = _$GitHubAuthLoadedImpl;
+abstract class GitHubAuthLoggedIn implements GitHubAuthStatus {
+  const factory GitHubAuthLoggedIn() = _$GitHubAuthLoggedInImpl;
+}
+
+/// @nodoc
+abstract class _$$GitHubAuthLoggedOutImplCopyWith<$Res> {
+  factory _$$GitHubAuthLoggedOutImplCopyWith(_$GitHubAuthLoggedOutImpl value,
+          $Res Function(_$GitHubAuthLoggedOutImpl) then) =
+      __$$GitHubAuthLoggedOutImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$GitHubAuthLoggedOutImplCopyWithImpl<$Res>
+    extends _$GitHubAuthStatusCopyWithImpl<$Res, _$GitHubAuthLoggedOutImpl>
+    implements _$$GitHubAuthLoggedOutImplCopyWith<$Res> {
+  __$$GitHubAuthLoggedOutImplCopyWithImpl(_$GitHubAuthLoggedOutImpl _value,
+      $Res Function(_$GitHubAuthLoggedOutImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$GitHubAuthLoggedOutImpl implements GitHubAuthLoggedOut {
+  const _$GitHubAuthLoggedOutImpl();
+
+  @override
+  String toString() {
+    return 'GitHubAuthStatus.loggedOut()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$GitHubAuthLoggedOutImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function() loggedIn,
+    required TResult Function() loggedOut,
+    required TResult Function() serverError,
+    required TResult Function() otherException,
+  }) {
+    return loggedOut();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function()? loggedIn,
+    TResult? Function()? loggedOut,
+    TResult? Function()? serverError,
+    TResult? Function()? otherException,
+  }) {
+    return loggedOut?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function()? loggedIn,
+    TResult Function()? loggedOut,
+    TResult Function()? serverError,
+    TResult Function()? otherException,
+    required TResult orElse(),
+  }) {
+    if (loggedOut != null) {
+      return loggedOut();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(GitHubAuthInitial value) initial,
+    required TResult Function(GitHubAuthLoading value) loading,
+    required TResult Function(GitHubAuthLoggedIn value) loggedIn,
+    required TResult Function(GitHubAuthLoggedOut value) loggedOut,
+    required TResult Function(GitHubAuthServerError value) serverError,
+    required TResult Function(GitHubAuthOtherException value) otherException,
+  }) {
+    return loggedOut(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(GitHubAuthInitial value)? initial,
+    TResult? Function(GitHubAuthLoading value)? loading,
+    TResult? Function(GitHubAuthLoggedIn value)? loggedIn,
+    TResult? Function(GitHubAuthLoggedOut value)? loggedOut,
+    TResult? Function(GitHubAuthServerError value)? serverError,
+    TResult? Function(GitHubAuthOtherException value)? otherException,
+  }) {
+    return loggedOut?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(GitHubAuthInitial value)? initial,
+    TResult Function(GitHubAuthLoading value)? loading,
+    TResult Function(GitHubAuthLoggedIn value)? loggedIn,
+    TResult Function(GitHubAuthLoggedOut value)? loggedOut,
+    TResult Function(GitHubAuthServerError value)? serverError,
+    TResult Function(GitHubAuthOtherException value)? otherException,
+    required TResult orElse(),
+  }) {
+    if (loggedOut != null) {
+      return loggedOut(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class GitHubAuthLoggedOut implements GitHubAuthStatus {
+  const factory GitHubAuthLoggedOut() = _$GitHubAuthLoggedOutImpl;
 }
 
 /// @nodoc
@@ -529,8 +799,10 @@ class _$GitHubAuthServerErrorImpl implements GitHubAuthServerError {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() loaded,
+    required TResult Function() loggedIn,
+    required TResult Function() loggedOut,
     required TResult Function() serverError,
     required TResult Function() otherException,
   }) {
@@ -540,8 +812,10 @@ class _$GitHubAuthServerErrorImpl implements GitHubAuthServerError {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? loaded,
+    TResult? Function()? loggedIn,
+    TResult? Function()? loggedOut,
     TResult? Function()? serverError,
     TResult? Function()? otherException,
   }) {
@@ -551,8 +825,10 @@ class _$GitHubAuthServerErrorImpl implements GitHubAuthServerError {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? loaded,
+    TResult Function()? loggedIn,
+    TResult Function()? loggedOut,
     TResult Function()? serverError,
     TResult Function()? otherException,
     required TResult orElse(),
@@ -566,8 +842,10 @@ class _$GitHubAuthServerErrorImpl implements GitHubAuthServerError {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(GitHubAuthInitial value) initial,
     required TResult Function(GitHubAuthLoading value) loading,
-    required TResult Function(GitHubAuthLoaded value) loaded,
+    required TResult Function(GitHubAuthLoggedIn value) loggedIn,
+    required TResult Function(GitHubAuthLoggedOut value) loggedOut,
     required TResult Function(GitHubAuthServerError value) serverError,
     required TResult Function(GitHubAuthOtherException value) otherException,
   }) {
@@ -577,8 +855,10 @@ class _$GitHubAuthServerErrorImpl implements GitHubAuthServerError {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(GitHubAuthInitial value)? initial,
     TResult? Function(GitHubAuthLoading value)? loading,
-    TResult? Function(GitHubAuthLoaded value)? loaded,
+    TResult? Function(GitHubAuthLoggedIn value)? loggedIn,
+    TResult? Function(GitHubAuthLoggedOut value)? loggedOut,
     TResult? Function(GitHubAuthServerError value)? serverError,
     TResult? Function(GitHubAuthOtherException value)? otherException,
   }) {
@@ -588,8 +868,10 @@ class _$GitHubAuthServerErrorImpl implements GitHubAuthServerError {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(GitHubAuthInitial value)? initial,
     TResult Function(GitHubAuthLoading value)? loading,
-    TResult Function(GitHubAuthLoaded value)? loaded,
+    TResult Function(GitHubAuthLoggedIn value)? loggedIn,
+    TResult Function(GitHubAuthLoggedOut value)? loggedOut,
     TResult Function(GitHubAuthServerError value)? serverError,
     TResult Function(GitHubAuthOtherException value)? otherException,
     required TResult orElse(),
@@ -646,8 +928,10 @@ class _$GitHubAuthOtherExceptionImpl implements GitHubAuthOtherException {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() loaded,
+    required TResult Function() loggedIn,
+    required TResult Function() loggedOut,
     required TResult Function() serverError,
     required TResult Function() otherException,
   }) {
@@ -657,8 +941,10 @@ class _$GitHubAuthOtherExceptionImpl implements GitHubAuthOtherException {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? loaded,
+    TResult? Function()? loggedIn,
+    TResult? Function()? loggedOut,
     TResult? Function()? serverError,
     TResult? Function()? otherException,
   }) {
@@ -668,8 +954,10 @@ class _$GitHubAuthOtherExceptionImpl implements GitHubAuthOtherException {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? loaded,
+    TResult Function()? loggedIn,
+    TResult Function()? loggedOut,
     TResult Function()? serverError,
     TResult Function()? otherException,
     required TResult orElse(),
@@ -683,8 +971,10 @@ class _$GitHubAuthOtherExceptionImpl implements GitHubAuthOtherException {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(GitHubAuthInitial value) initial,
     required TResult Function(GitHubAuthLoading value) loading,
-    required TResult Function(GitHubAuthLoaded value) loaded,
+    required TResult Function(GitHubAuthLoggedIn value) loggedIn,
+    required TResult Function(GitHubAuthLoggedOut value) loggedOut,
     required TResult Function(GitHubAuthServerError value) serverError,
     required TResult Function(GitHubAuthOtherException value) otherException,
   }) {
@@ -694,8 +984,10 @@ class _$GitHubAuthOtherExceptionImpl implements GitHubAuthOtherException {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(GitHubAuthInitial value)? initial,
     TResult? Function(GitHubAuthLoading value)? loading,
-    TResult? Function(GitHubAuthLoaded value)? loaded,
+    TResult? Function(GitHubAuthLoggedIn value)? loggedIn,
+    TResult? Function(GitHubAuthLoggedOut value)? loggedOut,
     TResult? Function(GitHubAuthServerError value)? serverError,
     TResult? Function(GitHubAuthOtherException value)? otherException,
   }) {
@@ -705,8 +997,10 @@ class _$GitHubAuthOtherExceptionImpl implements GitHubAuthOtherException {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(GitHubAuthInitial value)? initial,
     TResult Function(GitHubAuthLoading value)? loading,
-    TResult Function(GitHubAuthLoaded value)? loaded,
+    TResult Function(GitHubAuthLoggedIn value)? loggedIn,
+    TResult Function(GitHubAuthLoggedOut value)? loggedOut,
     TResult Function(GitHubAuthServerError value)? serverError,
     TResult Function(GitHubAuthOtherException value)? otherException,
     required TResult orElse(),
@@ -726,39 +1020,45 @@ abstract class GitHubAuthOtherException implements GitHubAuthStatus {
 mixin _$GitHubAuthEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() signIn,
-    required TResult Function() signOut,
+    required TResult Function() validateToken,
+    required TResult Function(String code) signingIn,
+    required TResult Function() signingOut,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? signIn,
-    TResult? Function()? signOut,
+    TResult? Function()? validateToken,
+    TResult? Function(String code)? signingIn,
+    TResult? Function()? signingOut,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? signIn,
-    TResult Function()? signOut,
+    TResult Function()? validateToken,
+    TResult Function(String code)? signingIn,
+    TResult Function()? signingOut,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(SignIn value) signIn,
-    required TResult Function(SignOut value) signOut,
+    required TResult Function(ValidateToken value) validateToken,
+    required TResult Function(SigningIn value) signingIn,
+    required TResult Function(SigningOut value) signingOut,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(SignIn value)? signIn,
-    TResult? Function(SignOut value)? signOut,
+    TResult? Function(ValidateToken value)? validateToken,
+    TResult? Function(SigningIn value)? signingIn,
+    TResult? Function(SigningOut value)? signingOut,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(SignIn value)? signIn,
-    TResult Function(SignOut value)? signOut,
+    TResult Function(ValidateToken value)? validateToken,
+    TResult Function(SigningIn value)? signingIn,
+    TResult Function(SigningOut value)? signingOut,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -783,35 +1083,35 @@ class _$GitHubAuthEventCopyWithImpl<$Res, $Val extends GitHubAuthEvent>
 }
 
 /// @nodoc
-abstract class _$$SignInImplCopyWith<$Res> {
-  factory _$$SignInImplCopyWith(
-          _$SignInImpl value, $Res Function(_$SignInImpl) then) =
-      __$$SignInImplCopyWithImpl<$Res>;
+abstract class _$$ValidateTokenImplCopyWith<$Res> {
+  factory _$$ValidateTokenImplCopyWith(
+          _$ValidateTokenImpl value, $Res Function(_$ValidateTokenImpl) then) =
+      __$$ValidateTokenImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$SignInImplCopyWithImpl<$Res>
-    extends _$GitHubAuthEventCopyWithImpl<$Res, _$SignInImpl>
-    implements _$$SignInImplCopyWith<$Res> {
-  __$$SignInImplCopyWithImpl(
-      _$SignInImpl _value, $Res Function(_$SignInImpl) _then)
+class __$$ValidateTokenImplCopyWithImpl<$Res>
+    extends _$GitHubAuthEventCopyWithImpl<$Res, _$ValidateTokenImpl>
+    implements _$$ValidateTokenImplCopyWith<$Res> {
+  __$$ValidateTokenImplCopyWithImpl(
+      _$ValidateTokenImpl _value, $Res Function(_$ValidateTokenImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$SignInImpl implements SignIn {
-  const _$SignInImpl();
+class _$ValidateTokenImpl implements ValidateToken {
+  const _$ValidateTokenImpl();
 
   @override
   String toString() {
-    return 'GitHubAuthEvent.signIn()';
+    return 'GitHubAuthEvent.validateToken()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$SignInImpl);
+        (other.runtimeType == runtimeType && other is _$ValidateTokenImpl);
   }
 
   @override
@@ -820,30 +1120,33 @@ class _$SignInImpl implements SignIn {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() signIn,
-    required TResult Function() signOut,
+    required TResult Function() validateToken,
+    required TResult Function(String code) signingIn,
+    required TResult Function() signingOut,
   }) {
-    return signIn();
+    return validateToken();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? signIn,
-    TResult? Function()? signOut,
+    TResult? Function()? validateToken,
+    TResult? Function(String code)? signingIn,
+    TResult? Function()? signingOut,
   }) {
-    return signIn?.call();
+    return validateToken?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? signIn,
-    TResult Function()? signOut,
+    TResult Function()? validateToken,
+    TResult Function(String code)? signingIn,
+    TResult Function()? signingOut,
     required TResult orElse(),
   }) {
-    if (signIn != null) {
-      return signIn();
+    if (validateToken != null) {
+      return validateToken();
     }
     return orElse();
   }
@@ -851,69 +1154,211 @@ class _$SignInImpl implements SignIn {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(SignIn value) signIn,
-    required TResult Function(SignOut value) signOut,
+    required TResult Function(ValidateToken value) validateToken,
+    required TResult Function(SigningIn value) signingIn,
+    required TResult Function(SigningOut value) signingOut,
   }) {
-    return signIn(this);
+    return validateToken(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(SignIn value)? signIn,
-    TResult? Function(SignOut value)? signOut,
+    TResult? Function(ValidateToken value)? validateToken,
+    TResult? Function(SigningIn value)? signingIn,
+    TResult? Function(SigningOut value)? signingOut,
   }) {
-    return signIn?.call(this);
+    return validateToken?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(SignIn value)? signIn,
-    TResult Function(SignOut value)? signOut,
+    TResult Function(ValidateToken value)? validateToken,
+    TResult Function(SigningIn value)? signingIn,
+    TResult Function(SigningOut value)? signingOut,
     required TResult orElse(),
   }) {
-    if (signIn != null) {
-      return signIn(this);
+    if (validateToken != null) {
+      return validateToken(this);
     }
     return orElse();
   }
 }
 
-abstract class SignIn implements GitHubAuthEvent {
-  const factory SignIn() = _$SignInImpl;
+abstract class ValidateToken implements GitHubAuthEvent {
+  const factory ValidateToken() = _$ValidateTokenImpl;
 }
 
 /// @nodoc
-abstract class _$$SignOutImplCopyWith<$Res> {
-  factory _$$SignOutImplCopyWith(
-          _$SignOutImpl value, $Res Function(_$SignOutImpl) then) =
-      __$$SignOutImplCopyWithImpl<$Res>;
+abstract class _$$SigningInImplCopyWith<$Res> {
+  factory _$$SigningInImplCopyWith(
+          _$SigningInImpl value, $Res Function(_$SigningInImpl) then) =
+      __$$SigningInImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String code});
 }
 
 /// @nodoc
-class __$$SignOutImplCopyWithImpl<$Res>
-    extends _$GitHubAuthEventCopyWithImpl<$Res, _$SignOutImpl>
-    implements _$$SignOutImplCopyWith<$Res> {
-  __$$SignOutImplCopyWithImpl(
-      _$SignOutImpl _value, $Res Function(_$SignOutImpl) _then)
+class __$$SigningInImplCopyWithImpl<$Res>
+    extends _$GitHubAuthEventCopyWithImpl<$Res, _$SigningInImpl>
+    implements _$$SigningInImplCopyWith<$Res> {
+  __$$SigningInImplCopyWithImpl(
+      _$SigningInImpl _value, $Res Function(_$SigningInImpl) _then)
       : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? code = null,
+  }) {
+    return _then(_$SigningInImpl(
+      code: null == code
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
 }
 
 /// @nodoc
 
-class _$SignOutImpl implements SignOut {
-  const _$SignOutImpl();
+class _$SigningInImpl implements SigningIn {
+  const _$SigningInImpl({required this.code});
+
+  @override
+  final String code;
 
   @override
   String toString() {
-    return 'GitHubAuthEvent.signOut()';
+    return 'GitHubAuthEvent.signingIn(code: $code)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$SignOutImpl);
+        (other.runtimeType == runtimeType &&
+            other is _$SigningInImpl &&
+            (identical(other.code, code) || other.code == code));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, code);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SigningInImplCopyWith<_$SigningInImpl> get copyWith =>
+      __$$SigningInImplCopyWithImpl<_$SigningInImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() validateToken,
+    required TResult Function(String code) signingIn,
+    required TResult Function() signingOut,
+  }) {
+    return signingIn(code);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? validateToken,
+    TResult? Function(String code)? signingIn,
+    TResult? Function()? signingOut,
+  }) {
+    return signingIn?.call(code);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? validateToken,
+    TResult Function(String code)? signingIn,
+    TResult Function()? signingOut,
+    required TResult orElse(),
+  }) {
+    if (signingIn != null) {
+      return signingIn(code);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ValidateToken value) validateToken,
+    required TResult Function(SigningIn value) signingIn,
+    required TResult Function(SigningOut value) signingOut,
+  }) {
+    return signingIn(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ValidateToken value)? validateToken,
+    TResult? Function(SigningIn value)? signingIn,
+    TResult? Function(SigningOut value)? signingOut,
+  }) {
+    return signingIn?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ValidateToken value)? validateToken,
+    TResult Function(SigningIn value)? signingIn,
+    TResult Function(SigningOut value)? signingOut,
+    required TResult orElse(),
+  }) {
+    if (signingIn != null) {
+      return signingIn(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class SigningIn implements GitHubAuthEvent {
+  const factory SigningIn({required final String code}) = _$SigningInImpl;
+
+  String get code;
+  @JsonKey(ignore: true)
+  _$$SigningInImplCopyWith<_$SigningInImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$SigningOutImplCopyWith<$Res> {
+  factory _$$SigningOutImplCopyWith(
+          _$SigningOutImpl value, $Res Function(_$SigningOutImpl) then) =
+      __$$SigningOutImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$SigningOutImplCopyWithImpl<$Res>
+    extends _$GitHubAuthEventCopyWithImpl<$Res, _$SigningOutImpl>
+    implements _$$SigningOutImplCopyWith<$Res> {
+  __$$SigningOutImplCopyWithImpl(
+      _$SigningOutImpl _value, $Res Function(_$SigningOutImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$SigningOutImpl implements SigningOut {
+  const _$SigningOutImpl();
+
+  @override
+  String toString() {
+    return 'GitHubAuthEvent.signingOut()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$SigningOutImpl);
   }
 
   @override
@@ -922,30 +1367,33 @@ class _$SignOutImpl implements SignOut {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() signIn,
-    required TResult Function() signOut,
+    required TResult Function() validateToken,
+    required TResult Function(String code) signingIn,
+    required TResult Function() signingOut,
   }) {
-    return signOut();
+    return signingOut();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? signIn,
-    TResult? Function()? signOut,
+    TResult? Function()? validateToken,
+    TResult? Function(String code)? signingIn,
+    TResult? Function()? signingOut,
   }) {
-    return signOut?.call();
+    return signingOut?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? signIn,
-    TResult Function()? signOut,
+    TResult Function()? validateToken,
+    TResult Function(String code)? signingIn,
+    TResult Function()? signingOut,
     required TResult orElse(),
   }) {
-    if (signOut != null) {
-      return signOut();
+    if (signingOut != null) {
+      return signingOut();
     }
     return orElse();
   }
@@ -953,35 +1401,38 @@ class _$SignOutImpl implements SignOut {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(SignIn value) signIn,
-    required TResult Function(SignOut value) signOut,
+    required TResult Function(ValidateToken value) validateToken,
+    required TResult Function(SigningIn value) signingIn,
+    required TResult Function(SigningOut value) signingOut,
   }) {
-    return signOut(this);
+    return signingOut(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(SignIn value)? signIn,
-    TResult? Function(SignOut value)? signOut,
+    TResult? Function(ValidateToken value)? validateToken,
+    TResult? Function(SigningIn value)? signingIn,
+    TResult? Function(SigningOut value)? signingOut,
   }) {
-    return signOut?.call(this);
+    return signingOut?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(SignIn value)? signIn,
-    TResult Function(SignOut value)? signOut,
+    TResult Function(ValidateToken value)? validateToken,
+    TResult Function(SigningIn value)? signingIn,
+    TResult Function(SigningOut value)? signingOut,
     required TResult orElse(),
   }) {
-    if (signOut != null) {
-      return signOut(this);
+    if (signingOut != null) {
+      return signingOut(this);
     }
     return orElse();
   }
 }
 
-abstract class SignOut implements GitHubAuthEvent {
-  const factory SignOut() = _$SignOutImpl;
+abstract class SigningOut implements GitHubAuthEvent {
+  const factory SigningOut() = _$SigningOutImpl;
 }

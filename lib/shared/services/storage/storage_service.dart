@@ -7,4 +7,6 @@ abstract class StorageService {
   FutureOr<String?> loadAccessToken() async {
     return null;
   }
+
+  Future<void> clearToken() async {}
 }

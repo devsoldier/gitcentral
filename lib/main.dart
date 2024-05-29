@@ -2,8 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gitcentral/features/maintenance/screens/maintenance_check.dart';
+import 'package:gitcentral/features/theme/screen/theme_wrapper.dart';
 import 'package:gitcentral/shared/interceptor/dio_interceptor.dart';
 import 'package:gitcentral/shared/services/api_service/dio_config.dart';
+import 'package:gitcentral/shared/services/storage/sharedpref_storage_service.dart';
 
 import 'app.dart';
 
@@ -19,10 +22,20 @@ void main() async {
 
   await dependencySetup(container);
 
-  runApp(const App());
+  runApp(
+    UncontrolledProviderScope(
+      container: container,
+      child: const ThemeWrapper(
+        child: MaintenanceCheck(
+          child: App(),
+        ),
+      ),
+    ),
+  );
 }
 
 Future<void> dependencySetup(ProviderContainer container) async {
+  await container.read(sharedPrefsStorageServiceProvider).initStorage();
   final interceptor = container.read(dioInterceptorProvider);
   final logInterceptor = LogInterceptor(
     request: true,
@@ -30,7 +43,7 @@ Future<void> dependencySetup(ProviderContainer container) async {
     requestBody: false,
     error: true,
     responseHeader: false,
-    responseBody: true,
+    responseBody: false,
   );
 
   dio.interceptors.addAll([

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-const kPrimaryColor = Color.fromARGB(255, 96, 191, 251);
-const kSecondaryColor = Color.fromARGB(255, 211, 248, 255);
+const kPrimaryColor = Color(0xFF2D333B);
+const kSecondaryColor = Color(0xFFADBAC7);
 const kColorsurfaceCanvas = Color(0xFFF6F6FB);
 const Color kColorBodyText = Colors.black;
 const Color kColorDisplayText = Color(0xFF334151);
@@ -12,7 +12,8 @@ const Color kGreyShade2 = Color.fromARGB(255, 143, 142, 142);
 const Color kGreyShade3 = Color.fromARGB(255, 88, 88, 88);
 const Color kGreyShade4 = Color.fromARGB(255, 58, 58, 58);
 
-const Color kBackgroundColor = Color(0xFFD6D6E6);
+// const Color kBackgroundColor = Color(0xFFD6D6E6);
+const Color kBackgroundColor = Colors.white;
 
 const kPrimaryFont = 'Montserrat';
 
@@ -24,7 +25,7 @@ ThemeData get kAppLightTheme {
     primaryColor: kPrimaryColor,
     colorScheme: buildColorScheme(base.colorScheme),
     disabledColor: kGreyShade2,
-    scaffoldBackgroundColor: kColorsurfaceCanvas,
+    scaffoldBackgroundColor: kBackgroundColor,
     appBarTheme: buildAppBarTheme(),
     drawerTheme: const DrawerThemeData(elevation: 0),
     textTheme: buildTextTheme(base.textTheme),
@@ -141,14 +142,10 @@ TextTheme buildTextTheme(TextTheme base) {
 buildAppBarTheme() {
   return const AppBarTheme(
     centerTitle: true,
-    color: Colors.white,
-    scrolledUnderElevation: 0,
+    backgroundColor: Colors.transparent,
     elevation: 0,
-    titleTextStyle: TextStyle(
-      fontWeight: FontWeight.w600,
-      color: kGreyShade4,
-    ),
-    iconTheme: IconThemeData(color: kGreyShade2),
+    surfaceTintColor: Colors.transparent,
+    shadowColor: Colors.transparent,
   );
 }
 
@@ -157,12 +154,12 @@ InputDecorationTheme buildInputDecorationTheme(
   TextTheme baseTextTheme,
 ) {
   const borderSide = BorderSide(
-    color: kGreyShade1,
+    color: kGreyShade2,
   );
   final inputBorder = OutlineInputBorder(
     borderRadius: BorderRadius.circular(10),
     borderSide: const BorderSide(
-      color: kGreyShade1,
+      color: kGreyShade2,
     ),
   );
   return base.copyWith(
@@ -196,13 +193,15 @@ InputDecorationTheme buildInputDecorationTheme(
 buildElevatedButtonTheme() {
   return ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
+      elevation: 0,
       backgroundColor: kPrimaryColor,
-      foregroundColor: Colors.white,
+      foregroundColor: kColorDisplayText,
       minimumSize: const Size(double.infinity, 53),
       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
+      side: const BorderSide(),
     ),
   );
 }

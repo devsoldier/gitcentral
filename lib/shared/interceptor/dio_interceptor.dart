@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gitcentral/shared/services/global_messenger/global_messenger_event.dart';
@@ -37,7 +39,9 @@ class DioInterceptor extends QueuedInterceptor {
       final newOptions = await _attachRequestHeader(options, accessToken);
       return super.onRequest(newOptions, handler);
     } else {
-      return super.onRequest(options, handler);
+      final getTokenOptions =
+          options.copyWith(headers: {'Accept': 'application/json'});
+      return super.onRequest(getTokenOptions, handler);
     }
   }
 
@@ -84,8 +88,7 @@ class DioInterceptor extends QueuedInterceptor {
           headers: {
             'Authorization': 'Bearer $accessToken',
             'Connection': 'keep-alive',
-            'Accept': 'application/vnd.github+json',
-            'X-Github-Api-Version': '2022-11-28'
+            'Accept': 'application/json'
           },
         );
       } else {
