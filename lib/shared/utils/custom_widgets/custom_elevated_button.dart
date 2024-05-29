@@ -105,7 +105,7 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton>
               left: offset.dy,
               child: SizedBox(
                 height: 53,
-                // width: screenWidth * (widget.widthFactor ?? 1.0),
+                width: screenWidth * (widget.widthFactor ?? 1.0),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
                   child: ElevatedButton(
