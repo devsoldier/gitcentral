@@ -51,8 +51,13 @@ class FlutterRepoApiService {
     required int currentPage,
   }) async {
     try {
-      if (query == null || query.isEmpty) return Result.empty();
-      final formattedQuery = query.replaceAll(' ', '+');
+      String? formattedQuery;
+      if (query == null || query.isEmpty) {
+        formattedQuery = '';
+      } else {
+        formattedQuery = query.replaceAll(' ', '+');
+      }
+
       final response = await apiService.makeRequest(
         RequestMethod.get,
         '/search/repositories?q=flutter/$formattedQuery+org:flutter&per_page=$perPage&page=$currentPage',

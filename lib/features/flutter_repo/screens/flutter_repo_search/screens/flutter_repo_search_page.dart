@@ -36,6 +36,10 @@ class _FlutterRepoSearchPageState extends ConsumerState<FlutterRepoSearchPage> {
         content = FlutterRepoSearchResult(textController: controller);
       });
     } else {
+      /// Reset search result
+      ref
+          .read(flutterRepoSearchNotifierProvider.notifier)
+          .mapEventsToState(const SearchRepo(query: ''));
       if (!mounted) return;
       setState(() {
         content = const FlutterRepoListPage();
@@ -105,7 +109,8 @@ class _FlutterRepoSearchPageState extends ConsumerState<FlutterRepoSearchPage> {
                     ),
                   ),
                   GestureDetector(
-                      onTap: () => signOut(), child: Icon(Icons.exit_to_app))
+                      onTap: () => signOut(),
+                      child: const Icon(Icons.exit_to_app))
                 ],
               ),
             ),

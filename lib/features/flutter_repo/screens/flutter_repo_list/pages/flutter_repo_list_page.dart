@@ -161,7 +161,7 @@ Widget card({
     padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10),
     child: FadeTranslateWidget(
       offset: const Offset(0, 100),
-      animationDuration: 550,
+      animationDuration: 750,
       delay: 200,
       child: RoundedBorderedContainer(
         width: 0.5,
