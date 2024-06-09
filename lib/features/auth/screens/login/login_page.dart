@@ -20,7 +20,7 @@ class LoginPage extends ConsumerStatefulWidget {
 }
 
 class _LoginPageState extends ConsumerState<LoginPage> {
-  GitHubAuthNotifier get authNotifier => ref.read(gitHubAuthNotifier.notifier);
+  // GitHubAuthNotifier get authNotifier => ref.read(gitHubAuthNotifier.notifier);
 
   double? buttonWidth;
 
@@ -58,14 +58,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(gitHubAuthNotifier, (previous, next) {
-      if (next.status is GitHubAuthServerError ||
-          next.status is GitHubAuthOtherException) {
-        if (!mounted) return;
-        showErrorSnackBar(context,
-            message: 'Failed to authorize, try again later');
-      }
-    });
+    // ref.listen(gitHubAuthNotifier, (previous, next) {
+    //   if (next.status is GitHubAuthServerError ||
+    //       next.status is GitHubAuthOtherException) {
+    //     if (!mounted) return;
+    //     showErrorSnackBar(context,
+    //         message: 'Failed to authorize, try again later');
+    //   }
+    // });
     return Scaffold(
       body: Stack(
         children: [

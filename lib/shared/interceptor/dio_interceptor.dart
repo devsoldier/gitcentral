@@ -1,32 +1,22 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore: unused_import
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gitcentral/shared/services/global_messenger/global_messenger_event.dart';
+
 import 'package:gitcentral/shared/services/global_messenger/global_messenger_service.dart';
-import 'package:gitcentral/shared/services/storage/sharedpref_storage_service.dart';
 import 'package:gitcentral/shared/services/storage/storage_service.dart';
 import 'package:gitcentral/shared/utils/helpers/helper.dart';
 
-final dioInterceptorProvider = Provider.autoDispose(
-  (ref) {
-    ref.keepAlive();
-    return DioInterceptor(
-      ref: ref,
-      // storageService: SharedPrefsStorageService(),
-    );
-  },
-);
-
 class DioInterceptor extends QueuedInterceptor {
-  final Ref ref;
+  final StorageService storageService;
+  final GlobalMessengerService globalMessengerService;
 
   DioInterceptor({
-    required this.ref,
+    required this.storageService,
+    required this.globalMessengerService,
   });
-
-  StorageService get storageService =>
-      ref.read(sharedPrefsStorageServiceProvider);
 
   @override
   void onRequest(
@@ -51,20 +41,12 @@ class DioInterceptor extends QueuedInterceptor {
     ResponseInterceptorHandler handler,
   ) async {
     if ((response.statusCode ?? 500) <= 500 &&
-        ref.read(globalMessengerServiceProvider).isSnackbarShowing) {
-      ref
-          .read(globalMessengerServiceProvider)
-          .messenger
-          .sink
-          .add(OperationRestored());
+        globalMessengerService.isSnackbarShowing) {
+      globalMessengerService.messenger.sink.add(OperationRestored());
     }
 
     if ((response.statusCode ?? 503) > 500) {
-      ref
-          .read(globalMessengerServiceProvider)
-          .messenger
-          .sink
-          .add(MaintenanceEvent());
+      globalMessengerService.messenger.sink.add(MaintenanceEvent());
     }
 
     return super.onResponse(response, handler);
@@ -73,7 +55,7 @@ class DioInterceptor extends QueuedInterceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     if (err.type == DioExceptionType.connectionError) {
-      ref.read(globalMessengerServiceProvider).messenger.sink.add(NoNetwork());
+      globalMessengerService.messenger.sink.add(NoNetwork());
     }
     super.onError(err, handler);
   }

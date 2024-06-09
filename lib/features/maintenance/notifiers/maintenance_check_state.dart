@@ -15,5 +15,4 @@ abstract class MaintenanceCheckStatus with _$MaintenanceCheckStatus {
   const factory MaintenanceCheckStatus.checking() = Checking;
   const factory MaintenanceCheckStatus.operational() = Operational;
   const factory MaintenanceCheckStatus.maintenanceMode() = MaintenanceMode;
-  // TODO: app outdated status
 }

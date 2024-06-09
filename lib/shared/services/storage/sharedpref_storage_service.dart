@@ -1,20 +1,9 @@
 import 'dart:async';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gitcentral/shared/services/storage/storage_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final sharedPrefsStorageServiceProvider = Provider.autoDispose(
-  (ref) {
-    ref.keepAlive();
-    return SharedPrefsStorageService(ref: ref);
-  },
-);
-
 class SharedPrefsStorageService extends StorageService {
-  final Ref ref;
-  SharedPrefsStorageService({required this.ref});
-
   late final SharedPreferences sharedPrefs;
   final String kAccessTokenKey = 'accessToken';
   String? _accessToken;

@@ -4,23 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gitcentral/features/flutter_repo/repository/data_classes/flutter_repo_response.dart';
 import 'package:gitcentral/features/flutter_repo/repository/data_classes/pagination.dart';
 import 'package:gitcentral/shared/services/api_service/api_service.dart';
-import 'package:gitcentral/shared/services/api_service/dio_api_service.dart';
 import 'package:gitcentral/shared/services/api_service/dio_config.dart';
 import 'package:gitcentral/shared/utils/constants/constants.dart';
 import 'package:gitcentral/shared/utils/helpers/result.dart';
 
-final flutterRepoApiServiceProvider = Provider.autoDispose(
-  (ref) {
-    ref.keepAlive();
-    return FlutterRepoApiService(ref: ref, apiService: DioApiService(dio: dio));
-  },
-);
-
 class FlutterRepoApiService {
-  final Ref ref;
   final ApiService apiService;
 
-  FlutterRepoApiService({required this.ref, required this.apiService});
+  FlutterRepoApiService({required this.apiService});
 
   Future<Result<List<FlutterRepoResponse>>> getFlutterRepoList({
     required int currentPage,

@@ -2,15 +2,16 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gitcentral/features/auth/notifiers/github_auth_notifier.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:gitcentral/features/auth/notifiers/github_auth_bloc.dart';
 import 'package:gitcentral/features/auth/notifiers/github_auth_state.dart';
 import 'package:gitcentral/features/auth/services/github_auth_service.dart';
 import 'package:gitcentral/shared/utils/constants/constants.dart';
 import 'package:gitcentral/shared/utils/custom_widgets/custom_loading_indicator.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class GitHubAuthWebview extends ConsumerStatefulWidget {
+class GitHubAuthWebview extends StatefulWidget {
   const GitHubAuthWebview({super.key});
 
   static PageRoute route() {
@@ -23,12 +24,13 @@ class GitHubAuthWebview extends ConsumerStatefulWidget {
   }
 
   @override
-  ConsumerState<GitHubAuthWebview> createState() => _GitHubAuthWebviewState();
+  State<GitHubAuthWebview> createState() => _GitHubAuthWebviewState();
 }
 
-class _GitHubAuthWebviewState extends ConsumerState<GitHubAuthWebview> {
+class _GitHubAuthWebviewState extends State<GitHubAuthWebview> {
   late final WebViewController controller;
-  GitHubAuthService get authService => ref.read(gitHubAuthServiceProvider);
+  final authService = GetIt.I<GitHubAuthService>();
+
   bool showLoading = true;
 
   void initWebViewController() async {
@@ -56,11 +58,12 @@ class _GitHubAuthWebviewState extends ConsumerState<GitHubAuthWebview> {
                 Exception(Uri.parse(request.url).queryParameters['error']),
               );
             } else if (request.url.startsWith(redirectUrl)) {
-              await ref.read(gitHubAuthNotifier.notifier).mapEventsToState(
-                  SigningIn(
-                      code: request.url
-                          .replaceFirst('$redirectUrl?code=', '')
-                          .trim()));
+              context.read<GitHubAuthBloc>().add(
+                    SigningIn(
+                        code: request.url
+                            .replaceFirst('$redirectUrl?code=', '')
+                            .trim()),
+                  );
 
               if (mounted) {
                 setState(() {
@@ -80,7 +83,7 @@ class _GitHubAuthWebviewState extends ConsumerState<GitHubAuthWebview> {
       )
       ..loadRequest(
         Uri.parse(
-          ref.read(gitHubAuthServiceProvider).getAuthUrl(),
+          authService.getAuthUrl(),
         ),
       );
   }

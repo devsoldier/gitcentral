@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gitcentral/shared/services/global_messenger/global_messenger_service.dart';
 import 'package:gitcentral/shared/utils/constants/constants.dart';
 import 'package:gitcentral/shared/utils/themes/light_theme.dart';
@@ -143,7 +142,7 @@ showErrorSnackBar(
 }
 
 showPersistentSnackbar(
-  WidgetRef ref,
+  GlobalMessengerService messenger,
   BuildContext context,
   String? message, {
   int? ms,
@@ -163,9 +162,7 @@ showPersistentSnackbar(
         GestureDetector(
           onTap: () {
             scaffoldKey.currentState?.clearSnackBars();
-            ref
-                .read(globalMessengerServiceProvider)
-                .updateSnackbarStatus(false);
+            messenger.updateSnackbarStatus(false);
           },
           child: const Icon(
             Icons.close,

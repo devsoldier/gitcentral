@@ -2,9 +2,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
-import 'package:gitcentral/features/maintenance/notifiers/maintenance_check_notifier.dart';
+import 'package:gitcentral/features/maintenance/notifiers/maintenance_check_bloc.dart';
 import 'package:gitcentral/features/maintenance/notifiers/maintenance_check_state.dart';
 import 'package:gitcentral/features/maintenance/screens/maintenance_mode.page.dart';
 import 'package:gitcentral/shared/services/global_messenger/global_messenger_event.dart';
@@ -13,7 +14,7 @@ import 'package:gitcentral/shared/utils/constants/constants.dart';
 import 'package:gitcentral/shared/utils/custom_widgets/custom_snackbars.dart';
 import 'package:gitcentral/shared/utils/helpers/debouncer.dart';
 
-class MaintenanceCheck extends ConsumerStatefulWidget {
+class MaintenanceCheck extends StatefulWidget {
   final Widget child;
   const MaintenanceCheck({
     super.key,
@@ -21,39 +22,40 @@ class MaintenanceCheck extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<MaintenanceCheck> createState() => _MaintenanceCheckState();
+  State<MaintenanceCheck> createState() => _MaintenanceCheckState();
 }
 
-class _MaintenanceCheckState extends ConsumerState<MaintenanceCheck> {
-  GlobalMessengerService get globalMessenger =>
-      ref.read(globalMessengerServiceProvider);
+class _MaintenanceCheckState extends State<MaintenanceCheck> {
+  final globalMessenger = GetIt.I<GlobalMessengerService>();
 
   @override
   void initState() {
     globalMessenger.messenger.stream.listen(
       (event) async {
-        if (event is OperationRestored &&
-            ref.read(globalMessengerServiceProvider).isSnackbarShowing) {
+        /// Regain internet or server restored
+        if (event is OperationRestored && globalMessenger.isSnackbarShowing) {
           scaffoldKey.currentState?.clearSnackBars();
-          ref.read(globalMessengerServiceProvider).updateSnackbarStatus(false);
+          globalMessenger.updateSnackbarStatus(false);
         }
+
+        /// No internet
         if (event is NoNetwork) {
           scaffoldKey.currentState?.clearSnackBars();
           await debouncer();
           if (!mounted) return;
           scaffoldKey.currentState?.showSnackBar(
             showPersistentSnackbar(
-              ref,
+              globalMessenger,
               context,
               'You have no internet connection.',
             ),
           );
-          ref.read(globalMessengerServiceProvider).updateSnackbarStatus(true);
+          globalMessenger.updateSnackbarStatus(true);
         }
+
+        /// Maintenance Mode
         if (event is MaintenanceEvent) {
-          ref
-              .read(maintenanceCheckNotifierProvider.notifier)
-              .showMaintenanceMode();
+          context.read<MaintenanceCheckBloc>().add(const MaintenanceMode());
         }
       },
     );
@@ -62,22 +64,27 @@ class _MaintenanceCheckState extends ConsumerState<MaintenanceCheck> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(maintenanceCheckNotifierProvider);
+    final state = context.watch<MaintenanceCheckBloc>().state;
 
-    ref.listen(maintenanceCheckNotifierProvider, (previous, next) {
-      if (next.status is MaintenanceMode) {
-        /// Remove user's current page until this page
-        Navigator.of(navigatorKey.currentContext!).popUntil(
-          (route) => route.isFirst,
-        );
-      }
-    });
-    return Scaffold(
-        body: Stack(
-      children: [
-        if (state.status is MaintenanceMode) const MaintenanceModePage(),
-        if (state.status is Operational) widget.child,
-      ],
-    ));
+    return BlocProvider(
+      create: (context) => MaintenanceCheckBloc(),
+      child: BlocListener<MaintenanceCheckBloc, MaintenanceCheckState>(
+        listener: (context, state) {
+          /// Force user's current page to this page when in maintenance mode
+          if (state.status is MaintenanceMode) {
+            Navigator.of(navigatorKey.currentContext!).popUntil(
+              (route) => route.isFirst,
+            );
+          }
+        },
+        child: Scaffold(
+            body: Stack(
+          children: [
+            if (state.status is MaintenanceMode) const MaintenanceModePage(),
+            if (state.status is Operational) widget.child,
+          ],
+        )),
+      ),
+    );
   }
 }

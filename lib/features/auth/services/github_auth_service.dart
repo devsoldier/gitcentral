@@ -1,32 +1,17 @@
 import 'dart:developer';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gitcentral/shared/services/api_service/api_service.dart';
-import 'package:gitcentral/shared/services/api_service/dio_api_service.dart';
 import 'package:gitcentral/shared/services/api_service/dio_config.dart';
-import 'package:gitcentral/shared/services/storage/sharedpref_storage_service.dart';
 import 'package:gitcentral/shared/services/storage/storage_service.dart';
 import 'package:gitcentral/shared/utils/constants/constants.dart';
 import 'package:gitcentral/shared/utils/constants/environment_config.dart';
 import 'package:gitcentral/shared/utils/helpers/result.dart';
 
-final gitHubAuthServiceProvider = Provider.autoDispose(
-  (ref) {
-    ref.keepAlive();
-    return GitHubAuthService(
-      ref: ref,
-      apiService: DioApiService(dio: dio),
-    );
-  },
-);
-
 class GitHubAuthService {
-  final Ref ref;
   final ApiService apiService;
-  GitHubAuthService({required this.ref, required this.apiService});
+  final StorageService storageService;
 
-  StorageService get storageService =>
-      ref.read(sharedPrefsStorageServiceProvider);
+  GitHubAuthService({required this.apiService, required this.storageService});
 
   String getAuthUrl() {
     return '${EnvironmentConfig.authUrl}/login/oauth/authorize?client_id=${EnvironmentConfig.clientId}&redirect_uri=$redirectUrl&prompt=consent';
