@@ -39,19 +39,19 @@ mixin _$FlutterRepoSearchEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SearchRepo value) searchRepo,
-    required TResult Function(FetchMoreItems value) fetchMoreItems,
+    required TResult Function(FetchMoreSearchItems value) fetchMoreItems,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SearchRepo value)? searchRepo,
-    TResult? Function(FetchMoreItems value)? fetchMoreItems,
+    TResult? Function(FetchMoreSearchItems value)? fetchMoreItems,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SearchRepo value)? searchRepo,
-    TResult Function(FetchMoreItems value)? fetchMoreItems,
+    TResult Function(FetchMoreSearchItems value)? fetchMoreItems,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -193,7 +193,7 @@ class _$SearchRepoImpl implements SearchRepo {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SearchRepo value) searchRepo,
-    required TResult Function(FetchMoreItems value) fetchMoreItems,
+    required TResult Function(FetchMoreSearchItems value) fetchMoreItems,
   }) {
     return searchRepo(this);
   }
@@ -202,7 +202,7 @@ class _$SearchRepoImpl implements SearchRepo {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SearchRepo value)? searchRepo,
-    TResult? Function(FetchMoreItems value)? fetchMoreItems,
+    TResult? Function(FetchMoreSearchItems value)? fetchMoreItems,
   }) {
     return searchRepo?.call(this);
   }
@@ -211,7 +211,7 @@ class _$SearchRepoImpl implements SearchRepo {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SearchRepo value)? searchRepo,
-    TResult Function(FetchMoreItems value)? fetchMoreItems,
+    TResult Function(FetchMoreSearchItems value)? fetchMoreItems,
     required TResult orElse(),
   }) {
     if (searchRepo != null) {
@@ -233,22 +233,23 @@ abstract class SearchRepo implements FlutterRepoSearchEvent {
 }
 
 /// @nodoc
-abstract class _$$FetchMoreItemsImplCopyWith<$Res>
+abstract class _$$FetchMoreSearchItemsImplCopyWith<$Res>
     implements $FlutterRepoSearchEventCopyWith<$Res> {
-  factory _$$FetchMoreItemsImplCopyWith(_$FetchMoreItemsImpl value,
-          $Res Function(_$FetchMoreItemsImpl) then) =
-      __$$FetchMoreItemsImplCopyWithImpl<$Res>;
+  factory _$$FetchMoreSearchItemsImplCopyWith(_$FetchMoreSearchItemsImpl value,
+          $Res Function(_$FetchMoreSearchItemsImpl) then) =
+      __$$FetchMoreSearchItemsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String? query});
 }
 
 /// @nodoc
-class __$$FetchMoreItemsImplCopyWithImpl<$Res>
-    extends _$FlutterRepoSearchEventCopyWithImpl<$Res, _$FetchMoreItemsImpl>
-    implements _$$FetchMoreItemsImplCopyWith<$Res> {
-  __$$FetchMoreItemsImplCopyWithImpl(
-      _$FetchMoreItemsImpl _value, $Res Function(_$FetchMoreItemsImpl) _then)
+class __$$FetchMoreSearchItemsImplCopyWithImpl<$Res>
+    extends _$FlutterRepoSearchEventCopyWithImpl<$Res,
+        _$FetchMoreSearchItemsImpl>
+    implements _$$FetchMoreSearchItemsImplCopyWith<$Res> {
+  __$$FetchMoreSearchItemsImplCopyWithImpl(_$FetchMoreSearchItemsImpl _value,
+      $Res Function(_$FetchMoreSearchItemsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -256,7 +257,7 @@ class __$$FetchMoreItemsImplCopyWithImpl<$Res>
   $Res call({
     Object? query = freezed,
   }) {
-    return _then(_$FetchMoreItemsImpl(
+    return _then(_$FetchMoreSearchItemsImpl(
       query: freezed == query
           ? _value.query
           : query // ignore: cast_nullable_to_non_nullable
@@ -267,8 +268,8 @@ class __$$FetchMoreItemsImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$FetchMoreItemsImpl implements FetchMoreItems {
-  const _$FetchMoreItemsImpl({this.query});
+class _$FetchMoreSearchItemsImpl implements FetchMoreSearchItems {
+  const _$FetchMoreSearchItemsImpl({this.query});
 
   @override
   final String? query;
@@ -282,7 +283,7 @@ class _$FetchMoreItemsImpl implements FetchMoreItems {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$FetchMoreItemsImpl &&
+            other is _$FetchMoreSearchItemsImpl &&
             (identical(other.query, query) || other.query == query));
   }
 
@@ -292,9 +293,10 @@ class _$FetchMoreItemsImpl implements FetchMoreItems {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$FetchMoreItemsImplCopyWith<_$FetchMoreItemsImpl> get copyWith =>
-      __$$FetchMoreItemsImplCopyWithImpl<_$FetchMoreItemsImpl>(
-          this, _$identity);
+  _$$FetchMoreSearchItemsImplCopyWith<_$FetchMoreSearchItemsImpl>
+      get copyWith =>
+          __$$FetchMoreSearchItemsImplCopyWithImpl<_$FetchMoreSearchItemsImpl>(
+              this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -331,7 +333,7 @@ class _$FetchMoreItemsImpl implements FetchMoreItems {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SearchRepo value) searchRepo,
-    required TResult Function(FetchMoreItems value) fetchMoreItems,
+    required TResult Function(FetchMoreSearchItems value) fetchMoreItems,
   }) {
     return fetchMoreItems(this);
   }
@@ -340,7 +342,7 @@ class _$FetchMoreItemsImpl implements FetchMoreItems {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SearchRepo value)? searchRepo,
-    TResult? Function(FetchMoreItems value)? fetchMoreItems,
+    TResult? Function(FetchMoreSearchItems value)? fetchMoreItems,
   }) {
     return fetchMoreItems?.call(this);
   }
@@ -349,7 +351,7 @@ class _$FetchMoreItemsImpl implements FetchMoreItems {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SearchRepo value)? searchRepo,
-    TResult Function(FetchMoreItems value)? fetchMoreItems,
+    TResult Function(FetchMoreSearchItems value)? fetchMoreItems,
     required TResult orElse(),
   }) {
     if (fetchMoreItems != null) {
@@ -359,13 +361,14 @@ class _$FetchMoreItemsImpl implements FetchMoreItems {
   }
 }
 
-abstract class FetchMoreItems implements FlutterRepoSearchEvent {
-  const factory FetchMoreItems({final String? query}) = _$FetchMoreItemsImpl;
+abstract class FetchMoreSearchItems implements FlutterRepoSearchEvent {
+  const factory FetchMoreSearchItems({final String? query}) =
+      _$FetchMoreSearchItemsImpl;
 
   @override
   String? get query;
   @override
   @JsonKey(ignore: true)
-  _$$FetchMoreItemsImplCopyWith<_$FetchMoreItemsImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$FetchMoreSearchItemsImplCopyWith<_$FetchMoreSearchItemsImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

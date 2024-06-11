@@ -31,9 +31,10 @@ class Result<T> {
         message: message.toString(),
       );
 
-  factory Result.success(T? result) => Result(
+  factory Result.success(T? result, {dynamic message}) => Result(
         status: ResultStatus.success,
         data: result,
+        message: message,
       );
 
   factory Result.empty() => Result(status: ResultStatus.empty);

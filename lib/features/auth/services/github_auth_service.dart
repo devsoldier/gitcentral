@@ -19,6 +19,7 @@ class GitHubAuthService {
 
   Future<Result<String>> signIn(String? code) async {
     try {
+      log('signIn');
       final response = await apiService.authRequest(
         RequestMethod.post,
         '/login/oauth/access_token',
@@ -30,6 +31,7 @@ class GitHubAuthService {
       );
 
       if (response.statusCode == 200) {
+        log('token ${response.data['access_token']}');
         await storageService.setAccessToken(response.data['access_token']);
         return Result.success(response.data['access_token']);
       } else {

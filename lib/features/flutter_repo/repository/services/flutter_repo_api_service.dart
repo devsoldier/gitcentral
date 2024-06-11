@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gitcentral/features/flutter_repo/repository/data_classes/flutter_repo_response.dart';
 import 'package:gitcentral/features/flutter_repo/repository/data_classes/pagination.dart';
 import 'package:gitcentral/shared/services/api_service/api_service.dart';
@@ -59,7 +58,12 @@ class FlutterRepoApiService {
           (json) => FlutterRepoResponse.fromJson(json as Map<String, dynamic>));
 
       if (response.statusCode == 200) {
-        return Result.success(parsedResponse);
+        switch (parsedResponse.items) {
+          case []:
+            return Result.empty();
+          default:
+            return Result.success(parsedResponse);
+        }
       } else {
         return Result.failure();
       }

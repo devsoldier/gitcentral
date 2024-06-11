@@ -2,8 +2,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gitcentral/features/auth/notifiers/github_auth_notifier.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gitcentral/features/auth/notifiers/github_auth_bloc.dart';
 import 'package:gitcentral/features/auth/notifiers/github_auth_state.dart';
 import 'package:gitcentral/features/auth/screens/login_webview/github_auth_webview.dart';
 import 'package:gitcentral/shared/utils/constants/constants.dart';
@@ -12,16 +12,14 @@ import 'package:gitcentral/shared/utils/custom_widgets/custom_snackbars.dart';
 import 'package:gitcentral/shared/utils/custom_widgets/measure_size.dart';
 import 'package:gitcentral/shared/utils/themes/light_theme.dart';
 
-class LoginPage extends ConsumerStatefulWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  ConsumerState<LoginPage> createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends ConsumerState<LoginPage> {
-  // GitHubAuthNotifier get authNotifier => ref.read(gitHubAuthNotifier.notifier);
-
+class _LoginPageState extends State<LoginPage> {
   double? buttonWidth;
 
   bool animateOpacity = false;
@@ -30,7 +28,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     if (!mounted) return;
     ScaffoldMessenger.of(context).clearSnackBars();
     final result = await Navigator.of(context).push(
-      GitHubAuthWebview.route(),
+      GitHubAuthWebview.route(
+        bloc: BlocProvider.of<GitHubAuthBloc>(context),
+
+        /// Alternative
+        // onCodeReceived: (code) {
+        //   context.read<GitHubAuthBloc>().add(SigningIn(code: code));
+        // },
+      ),
     );
 
     if (result == null || result.toString().contains('access_denied')) {
@@ -58,59 +63,69 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    // ref.listen(gitHubAuthNotifier, (previous, next) {
-    //   if (next.status is GitHubAuthServerError ||
-    //       next.status is GitHubAuthOtherException) {
-    //     if (!mounted) return;
-    //     showErrorSnackBar(context,
-    //         message: 'Failed to authorize, try again later');
-    //   }
-    // });
-    return Scaffold(
-      body: Stack(
-        children: [
-          Center(
-            child: MeasureSize(
-              onChange: (size) {
-                if (!mounted) return;
-                setState(() {
-                  buttonWidth = size.width;
-                });
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AnimatedOpacity(
-                    duration: opacityDuration,
-                    opacity: (animateOpacity) ? 1 : 0,
-                    child: CustomElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: kBackgroundColor,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: Image.asset(
-                              height: 50,
-                              'assets/images/github_vector.png',
-                            ),
+    return BlocProvider.value(
+      value: BlocProvider.of<GitHubAuthBloc>(context),
+      child: BlocListener<GitHubAuthBloc, GitHubAuthState>(
+        listener: (context, state) {
+          if (state.status is GitHubAuthServerError ||
+              state.status is GitHubAuthOtherException) {
+            if (!mounted) return;
+            showErrorSnackBar(context,
+                message: 'Failed to authorize, try again later');
+          }
+          if (state.status is GitHubAuthLoggedIn) {
+            Navigator.of(navigatorKey.currentContext!).popUntil(
+              (route) => route.isFirst,
+            );
+          }
+        },
+        child: Scaffold(
+          body: Stack(
+            children: [
+              Center(
+                child: MeasureSize(
+                  onChange: (size) {
+                    if (!mounted) return;
+                    setState(() {
+                      buttonWidth = size.width;
+                    });
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AnimatedOpacity(
+                        duration: opacityDuration,
+                        opacity: (animateOpacity) ? 1 : 0,
+                        child: CustomElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: kBackgroundColor,
                           ),
-                          const Text(
-                            'Login With GitHub',
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Image.asset(
+                                  height: 50,
+                                  'assets/images/github_vector.png',
+                                ),
+                              ),
+                              const Text(
+                                'Login With GitHub',
+                              ),
+                            ],
                           ),
-                        ],
+                          onPressed: () async => navigationDelegate(),
+                        ),
                       ),
-                      onPressed: () async => navigationDelegate(),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

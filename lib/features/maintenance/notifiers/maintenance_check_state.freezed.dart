@@ -113,7 +113,7 @@ class __$$MaintenanceCheckStateImplCopyWithImpl<$Res>
 
 class _$MaintenanceCheckStateImpl implements _MaintenanceCheckState {
   _$MaintenanceCheckStateImpl(
-      {this.status = const MaintenanceCheckStatus.checking()});
+      {this.status = const MaintenanceCheckStatus.operational()});
 
   @override
   @JsonKey()

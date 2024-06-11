@@ -1,59 +1,57 @@
-import 'dart:developer';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:gitcentral/features/flutter_repo/repository/services/flutter_repo_api_service.dart';
 import 'package:gitcentral/features/flutter_repo/screens/flutter_repo_list/notifiers/flutter_repo_state.dart';
-import 'package:gitcentral/shared/utils/helpers/debouncer.dart';
+import 'package:gitcentral/features/flutter_repo/screens/flutter_repo_search/notifiers/flutter_repo_search_event.dart';
 
-class FlutterRepoBloc extends Bloc<FlutterRepoEvent, FlutterRepoState> {
-  final flutterRepo = GetIt.I<FlutterRepoApiService>();
+class FlutterRepoSearchBloc
+    extends Bloc<FlutterRepoSearchEvent, FlutterRepoState> {
+  final apiService = GetIt.I<FlutterRepoApiService>();
 
   int initialPage = 1;
 
-  FlutterRepoBloc() : super(FlutterRepoState()) {
-    on<FlutterRepoEvent>((event, emit) {});
-    on<InitialFetch>(initialFetch);
-    on<FetchMoreItems>(fetchMoreItems);
+  FlutterRepoSearchBloc()
+      : super(FlutterRepoState(status: const ApiInitial())) {
+    on<FlutterRepoSearchEvent>((event, emit) {});
+    on<SearchRepo>(getSearchResult);
   }
 
-  void initialFetch(
-    InitialFetch event,
+  void getSearchResult(
+    SearchRepo event,
     Emitter<FlutterRepoState> emit,
   ) async {
     try {
-      await debouncer();
       emit(state.copyWith(status: const ApiLoading()));
-      final result = await flutterRepo.getFlutterRepoList(currentPage: 1);
+      final result =
+          await apiService.getSearchResult(query: event.query, currentPage: 1);
       if (result.isSuccess) {
         emit(state.copyWith(
           status: const ApiLoaded(),
-          flutterRepoList: result.data,
+          flutterRepoList: result.data?.items,
         ));
       } else if (result.isFailure) {
         emit(state.copyWith(status: const ApiServerError()));
       } else {
         emit(state.copyWith(status: const ApiOtherException()));
       }
-    } catch (e, s) {
+    } catch (e) {
       emit(state.copyWith(status: const ApiOtherException()));
-      throw Exception('initialFetch: $e\n$s');
     }
   }
 
   Future<void> fetchMoreItems(
-    FetchMoreItems event,
+    FetchMoreSearchItems event,
     Emitter<FlutterRepoState> emit,
   ) async {
     try {
       emit(state.copyWith(fetchStatus: const ApiLoading()));
 
-      log('page+1 ${initialPage += 1}');
+      final result = await apiService.getSearchResult(
+        query: event.query,
+        currentPage: initialPage += 1,
+      );
 
-      final result =
-          await flutterRepo.getFlutterRepoList(currentPage: initialPage += 1);
-
-      if ((result.data ?? []).isEmpty) {
+      if ((result.data?.items ?? []).isEmpty) {
         emit(state.copyWith(fetchStatus: const ApiLoaded()));
       }
 
@@ -63,7 +61,7 @@ class FlutterRepoBloc extends Bloc<FlutterRepoEvent, FlutterRepoState> {
             status: const ApiLoaded(),
             fetchStatus: const ApiLoaded(),
             flutterRepoList:
-                (state.flutterRepoList ?? []) + (result.data ?? []),
+                (state.flutterRepoList ?? []) + (result.data?.items ?? []),
           ),
         );
       } else if (result.isFailure) {

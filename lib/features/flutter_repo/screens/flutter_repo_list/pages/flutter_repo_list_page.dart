@@ -2,10 +2,11 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:gitcentral/features/flutter_repo/repository/data_classes/flutter_repo_response.dart';
 import 'package:gitcentral/features/flutter_repo/screens/flutter_repo_detail/screens/flutter_repo_detail_page.dart';
-import 'package:gitcentral/features/flutter_repo/screens/flutter_repo_list/notifiers/flutter_repo_notifier.dart';
+import 'package:gitcentral/features/flutter_repo/screens/flutter_repo_list/notifiers/flutter_repo_bloc.dart';
 import 'package:gitcentral/features/flutter_repo/screens/flutter_repo_list/notifiers/flutter_repo_state.dart';
 import 'package:gitcentral/shared/utils/custom_widgets/custom_snackbars.dart';
 import 'package:gitcentral/shared/utils/custom_widgets/fade_translate_widget.dart';
@@ -13,54 +14,17 @@ import 'package:gitcentral/shared/utils/custom_widgets/infinite_scrolling.dart';
 import 'package:gitcentral/shared/utils/custom_widgets/rounded_container.dart';
 import 'package:gitcentral/shared/utils/themes/light_theme.dart';
 
-class FlutterRepoListPage extends ConsumerStatefulWidget {
+class FlutterRepoListPage extends StatefulWidget {
   const FlutterRepoListPage({super.key});
 
   @override
-  ConsumerState<FlutterRepoListPage> createState() =>
-      _FlutterRepoListPageState();
+  State<FlutterRepoListPage> createState() => _FlutterRepoListPageState();
 }
 
-class _FlutterRepoListPageState extends ConsumerState<FlutterRepoListPage> {
-  FlutterRepoNotifier get flutterRepoNotifier =>
-      ref.read(flutterRepoNotifierProvider.notifier);
+class _FlutterRepoListPageState extends State<FlutterRepoListPage> {
   final scroll = ScrollController();
   bool showLoading = false;
   bool isScrollingUp = false;
-
-  void loadMoreItems() async {
-    if (!mounted) return;
-    setState(() {
-      showLoading = true;
-    });
-    final result =
-        await flutterRepoNotifier.mapEventsToState(const FetchMoreItems());
-
-    if (result.result == false) {
-      if (result.errorMessage != null ||
-          (result.errorMessage ?? '').isNotEmpty) {
-        if (!mounted) return;
-        showErrorSnackBar(context, message: result.errorMessage);
-      } else {
-        if (!mounted) return;
-        showErrorSnackBar(context);
-      }
-    } else if (result.result == null) {
-      if (result.errorMessage != null ||
-          (result.errorMessage ?? '').isNotEmpty) {
-        if (!mounted) return;
-        showWarningSnackBar(context, message: result.errorMessage);
-      } else {
-        /// Result empty
-        /// Do nothing
-      }
-    }
-
-    if (!mounted) return;
-    setState(() {
-      showLoading = false;
-    });
-  }
 
   void navigationDelegate(FlutterRepoResponse? repo) {
     Navigator.of(context).push(
@@ -76,79 +40,109 @@ class _FlutterRepoListPageState extends ConsumerState<FlutterRepoListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(flutterRepoNotifierProvider);
-    return Stack(
-      children: [
-        if (state.status is ApiLoaded &&
-            (state.flutterRepoList ?? []).isNotEmpty)
-          RefreshIndicator(
-            onRefresh: () =>
-                flutterRepoNotifier.mapEventsToState(const InitialFetch()),
-            child: Scrollbar(
-              controller: scroll,
-              child: NotificationListener(
-                child: InfiniteScrolling(
-                  scrollController: scroll,
-                  itemsLoading: showLoading,
-                  // loadItems: () async =>
-                  //     ((state.flutterRepoList?.length ?? 0) <= 10)
-                  //         ? loadMoreItems()
-                  //         : null,
+    final state = context.watch<FlutterRepoBloc>().state;
+    return BlocListener<FlutterRepoBloc, FlutterRepoState>(
+      listener: (context, state) {
+        if (state.fetchStatus is ApiLoading) {
+          if (!mounted) return;
+          setState(() {
+            showLoading = true;
+          });
+          return;
+        } else {
+          setState(() {
+            showLoading = false;
+          });
+          if (state.fetchStatus is ApiServerError) {
+            if (!mounted) return;
+            showWarningSnackBar(context,
+                message: state.errorMessage ?? 'Failed to fetch');
+          }
+          if (state.fetchStatus is ApiOtherException) {
+            if (!mounted) return;
+            showWarningSnackBar(context,
+                message: state.errorMessage ?? 'Something Went Wrong');
+          }
+        }
+      },
+      child: Stack(
+        children: [
+          if (state.status is ApiLoaded &&
+              (state.flutterRepoList ?? []).isNotEmpty)
+            RefreshIndicator(
+              onRefresh: () async =>
+                  context.read<FlutterRepoBloc>().add(const InitialFetch()),
+              child: Scrollbar(
+                controller: scroll,
+                child: NotificationListener(
+                  child: InfiniteScrolling(
+                    scrollController: scroll,
+                    itemsLoading: showLoading,
+                    // loadItems: () async =>
+                    //     ((state.flutterRepoList?.length ?? 0) <= 10)
+                    //         ? loadMoreItems()
+                    //         : null,
 
-                  loadItems: () async => loadMoreItems(),
-                  child: ListView.builder(
-                    cacheExtent: 64,
-                    addAutomaticKeepAlives: true,
-                    physics: const ClampingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
-                    controller: scroll,
-                    shrinkWrap: true,
-                    itemCount: state.flutterRepoList?.length,
-                    itemBuilder: (context, index) {
-                      final repo = state.flutterRepoList?[index];
-                      return GestureDetector(
-                        onTap: () => navigationDelegate(repo),
-                        child: card(
-                          name: repo?.fullName ?? '-',
-                          description: repo?.description ?? '-',
-                        ),
-                      );
+                    loadItems: () async {
+                      log('gget more');
+                      context
+                          .read<FlutterRepoBloc>()
+                          .add(const FetchMoreItems());
                     },
+                    child: ListView.builder(
+                      cacheExtent: 64,
+                      addAutomaticKeepAlives: true,
+                      physics: const ClampingScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics()),
+                      controller: scroll,
+                      shrinkWrap: true,
+                      itemCount: state.flutterRepoList?.length,
+                      itemBuilder: (context, index) {
+                        final repo = state.flutterRepoList?[index];
+                        return GestureDetector(
+                          onTap: () => navigationDelegate(repo),
+                          child: card(
+                            name: repo?.fullName ?? '-',
+                            description: repo?.description ?? '-',
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
-            ),
-          )
-        else ...[
-          LayoutBuilder(
-            builder: (context, cons) {
-              return RefreshIndicator(
-                onRefresh: () async =>
-                    flutterRepoNotifier.mapEventsToState(const InitialFetch()),
-                child: ListView(
-                  physics: const ClampingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics()),
-                  shrinkWrap: true,
-                  children: [
-                    Container(
-                      constraints: BoxConstraints(minHeight: cons.maxHeight),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Center(
-                            child:
-                                CircularProgressIndicator(color: kPrimaryColor),
-                          )
-                        ],
+            )
+          else ...[
+            LayoutBuilder(
+              builder: (context, cons) {
+                return RefreshIndicator(
+                  onRefresh: () async =>
+                      context.read<FlutterRepoBloc>().add(const InitialFetch()),
+                  child: ListView(
+                    physics: const ClampingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
+                    shrinkWrap: true,
+                    children: [
+                      Container(
+                        constraints: BoxConstraints(minHeight: cons.maxHeight),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: CircularProgressIndicator(
+                                  color: kPrimaryColor),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
         ],
-      ],
+      ),
     );
   }
 }

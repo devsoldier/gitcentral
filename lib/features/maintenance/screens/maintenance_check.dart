@@ -64,26 +64,27 @@ class _MaintenanceCheckState extends State<MaintenanceCheck> {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<MaintenanceCheckBloc>().state;
-
-    return BlocProvider(
-      create: (context) => MaintenanceCheckBloc(),
-      child: BlocListener<MaintenanceCheckBloc, MaintenanceCheckState>(
-        listener: (context, state) {
-          /// Force user's current page to this page when in maintenance mode
-          if (state.status is MaintenanceMode) {
-            Navigator.of(navigatorKey.currentContext!).popUntil(
-              (route) => route.isFirst,
-            );
-          }
-        },
-        child: Scaffold(
+    return BlocListener<MaintenanceCheckBloc, MaintenanceCheckState>(
+      listener: (context, state) {
+        /// Force user's current page to this page when in maintenance mode
+        if (state.status is MaintenanceMode) {
+          Navigator.of(navigatorKey.currentContext!).popUntil(
+            (route) => route.isFirst,
+          );
+        }
+      },
+      child: BlocBuilder<MaintenanceCheckBloc, MaintenanceCheckState>(
+        builder: (context, state) {
+          return Scaffold(
             body: Stack(
-          children: [
-            if (state.status is MaintenanceMode) const MaintenanceModePage(),
-            if (state.status is Operational) widget.child,
-          ],
-        )),
+              children: [
+                if (state.status is MaintenanceMode)
+                  const MaintenanceModePage(),
+                if (state.status is Operational) widget.child,
+              ],
+            ),
+          );
+        },
       ),
     );
   }

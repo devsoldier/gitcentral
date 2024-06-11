@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:gitcentral/features/auth/notifiers/github_auth_state.dart';
@@ -12,19 +14,24 @@ class GitHubAuthBloc extends Bloc<GitHubAuthEvent, GitHubAuthState> {
   ({bool result, String errorMessage})? result;
 
   GitHubAuthBloc() : super(GitHubAuthState()) {
-    // on<GitHubAuthEvent>((event, emit) {
-    // if (event is SigningIn) {
-    //   signIn(event.code, emit);
-    // }
-    // });
-
-    on<SigningIn>(signIn);
-    on<SigningOut>(signOut);
-    on<ValidateToken>(validateToken);
+    on<GitHubAuthEvent>((event, emit) async {
+      log('event $event');
+      if (event is SigningIn) {
+        await signIn(event, emit);
+      }
+      if (event is SigningOut) {
+        await signOut(event, emit);
+      }
+      if (event is ValidateToken) {
+        await validateToken(event, emit);
+      }
+    });
   }
-  void signIn(SigningIn event, Emitter<GitHubAuthState> emit) async {
+
+  Future<void> signIn(SigningIn event, Emitter<GitHubAuthState> emit) async {
     try {
       final result = await authService.signIn(event.code);
+
       if (result.isSuccess) {
         emit(state.copyWith(status: const GitHubAuthLoggedIn()));
       } else if (result.isFailure) {
@@ -39,7 +46,7 @@ class GitHubAuthBloc extends Bloc<GitHubAuthEvent, GitHubAuthState> {
   }
 
   /// Revoke token
-  void signOut(SigningOut event, Emitter<GitHubAuthState> emit) async {
+  Future<void> signOut(SigningOut event, Emitter<GitHubAuthState> emit) async {
     try {
       await storageService.clearToken();
       emit(state.copyWith(status: const GitHubAuthLoggedOut()));
@@ -49,7 +56,8 @@ class GitHubAuthBloc extends Bloc<GitHubAuthEvent, GitHubAuthState> {
     }
   }
 
-  void validateToken(ValidateToken event, Emitter<GitHubAuthState> emit) async {
+  Future<void> validateToken(
+      ValidateToken event, Emitter<GitHubAuthState> emit) async {
     try {
       await debouncer();
       final token = await storageService.loadAccessToken();

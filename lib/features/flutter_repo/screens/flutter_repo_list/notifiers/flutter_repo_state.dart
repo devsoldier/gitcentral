@@ -6,7 +6,10 @@ part 'flutter_repo_state.freezed.dart';
 abstract class FlutterRepoState with _$FlutterRepoState {
   factory FlutterRepoState({
     @Default(ApiStatus.loading()) final ApiStatus? status,
+    @Default(ApiStatus.loaded()) final ApiStatus? fetchStatus,
     final List<FlutterRepoResponse>? flutterRepoList,
+    final String? errorMessage,
+    // final Result<List<FlutterRepoResponse>>? result,
   }) = _FlutterRepoState;
 }
 

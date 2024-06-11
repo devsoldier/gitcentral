@@ -1,23 +1,45 @@
 // ignore: unused_import
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
 import 'package:gitcentral/features/auth/notifiers/github_auth_bloc.dart';
 import 'package:gitcentral/features/auth/notifiers/github_auth_state.dart';
 import 'package:gitcentral/features/auth/services/github_auth_service.dart';
 import 'package:gitcentral/shared/utils/constants/constants.dart';
 import 'package:gitcentral/shared/utils/custom_widgets/custom_loading_indicator.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class GitHubAuthWebview extends StatefulWidget {
-  const GitHubAuthWebview({super.key});
+  ///Alternative
+  // final Function(String) onCodeReceived;
+  final GitHubAuthBloc bloc;
+  const GitHubAuthWebview({
+    Key? key,
+    required this.bloc,
 
-  static PageRoute route() {
-    return MaterialPageRoute(
+    /// Alternative
+    // required this.onCodeReceived,
+  }) : super(key: key);
+
+  static PageRoute route({required GitHubAuthBloc bloc}
+
+      /// Alternative
+      // {required Function(String) onCodeReceived}
+      ) {
+    return CupertinoPageRoute(
       builder: (context) {
-        return const GitHubAuthWebview();
+        ///Alternative
+        // return GitHubAuthWebview(onCodeReceived: onCodeReceived);
+        return BlocProvider.value(
+          value: bloc,
+          child: GitHubAuthWebview(
+            bloc: bloc,
+          ),
+        );
       },
       settings: const RouteSettings(name: '/githubauthwebview'),
     );
@@ -58,18 +80,15 @@ class _GitHubAuthWebviewState extends State<GitHubAuthWebview> {
                 Exception(Uri.parse(request.url).queryParameters['error']),
               );
             } else if (request.url.startsWith(redirectUrl)) {
-              context.read<GitHubAuthBloc>().add(
-                    SigningIn(
-                        code: request.url
-                            .replaceFirst('$redirectUrl?code=', '')
-                            .trim()),
-                  );
+              context.read<GitHubAuthBloc>().add(SigningIn(
+                  code: request.url
+                      .replaceFirst('$redirectUrl?code=', '')
+                      .trim()));
 
               if (mounted) {
                 setState(() {
                   showLoading = true;
                 });
-                Navigator.of(context).pop(true);
               }
             }
 
@@ -79,6 +98,30 @@ class _GitHubAuthWebviewState extends State<GitHubAuthWebview> {
 
             return NavigationDecision.navigate;
           },
+          // onNavigationRequest: (NavigationRequest request) async {
+          // if (request.url.startsWith('$redirectUrl?code=')) {
+          //   log('code ${request.url.replaceFirst('$redirectUrl?code=', '').trim()}');
+          // context.read<GitHubAuthBloc>().add(
+          //       SigningIn(
+          //           code: request.url
+          //               .replaceFirst('$redirectUrl?code=', '')
+          //               .trim()),
+          //     );
+
+          // if (mounted) {
+          //   context.read<GitHubAuthBloc>().add(
+          //         SigningIn(
+          //             code: request.url
+          //                 .replaceFirst('$redirectUrl?code=', '')
+          //                 .trim()),
+          //       );
+          // widget.onCodeReceived(
+          //     request.url.replaceFirst('$redirectUrl?code=', '').trim());
+          // }
+          // }
+
+          // return NavigationDecision.navigate;
+          // },
         ),
       )
       ..loadRequest(

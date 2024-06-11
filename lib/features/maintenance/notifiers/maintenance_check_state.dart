@@ -5,7 +5,7 @@ part 'maintenance_check_state.freezed.dart';
 @freezed
 abstract class MaintenanceCheckState with _$MaintenanceCheckState {
   factory MaintenanceCheckState({
-    @Default(MaintenanceCheckStatus.checking())
+    @Default(MaintenanceCheckStatus.operational())
     final MaintenanceCheckStatus? status,
   }) = _MaintenanceCheckState;
 }

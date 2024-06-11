@@ -17,8 +17,10 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$FlutterRepoState {
   ApiStatus? get status => throw _privateConstructorUsedError;
+  ApiStatus? get fetchStatus => throw _privateConstructorUsedError;
   List<FlutterRepoResponse>? get flutterRepoList =>
       throw _privateConstructorUsedError;
+  String? get errorMessage => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $FlutterRepoStateCopyWith<FlutterRepoState> get copyWith =>
@@ -31,9 +33,14 @@ abstract class $FlutterRepoStateCopyWith<$Res> {
           FlutterRepoState value, $Res Function(FlutterRepoState) then) =
       _$FlutterRepoStateCopyWithImpl<$Res, FlutterRepoState>;
   @useResult
-  $Res call({ApiStatus? status, List<FlutterRepoResponse>? flutterRepoList});
+  $Res call(
+      {ApiStatus? status,
+      ApiStatus? fetchStatus,
+      List<FlutterRepoResponse>? flutterRepoList,
+      String? errorMessage});
 
   $ApiStatusCopyWith<$Res>? get status;
+  $ApiStatusCopyWith<$Res>? get fetchStatus;
 }
 
 /// @nodoc
@@ -50,17 +57,27 @@ class _$FlutterRepoStateCopyWithImpl<$Res, $Val extends FlutterRepoState>
   @override
   $Res call({
     Object? status = freezed,
+    Object? fetchStatus = freezed,
     Object? flutterRepoList = freezed,
+    Object? errorMessage = freezed,
   }) {
     return _then(_value.copyWith(
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as ApiStatus?,
+      fetchStatus: freezed == fetchStatus
+          ? _value.fetchStatus
+          : fetchStatus // ignore: cast_nullable_to_non_nullable
+              as ApiStatus?,
       flutterRepoList: freezed == flutterRepoList
           ? _value.flutterRepoList
           : flutterRepoList // ignore: cast_nullable_to_non_nullable
               as List<FlutterRepoResponse>?,
+      errorMessage: freezed == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -75,6 +92,18 @@ class _$FlutterRepoStateCopyWithImpl<$Res, $Val extends FlutterRepoState>
       return _then(_value.copyWith(status: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ApiStatusCopyWith<$Res>? get fetchStatus {
+    if (_value.fetchStatus == null) {
+      return null;
+    }
+
+    return $ApiStatusCopyWith<$Res>(_value.fetchStatus!, (value) {
+      return _then(_value.copyWith(fetchStatus: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -85,10 +114,16 @@ abstract class _$$FlutterRepoStateImplCopyWith<$Res>
       __$$FlutterRepoStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({ApiStatus? status, List<FlutterRepoResponse>? flutterRepoList});
+  $Res call(
+      {ApiStatus? status,
+      ApiStatus? fetchStatus,
+      List<FlutterRepoResponse>? flutterRepoList,
+      String? errorMessage});
 
   @override
   $ApiStatusCopyWith<$Res>? get status;
+  @override
+  $ApiStatusCopyWith<$Res>? get fetchStatus;
 }
 
 /// @nodoc
@@ -103,17 +138,27 @@ class __$$FlutterRepoStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = freezed,
+    Object? fetchStatus = freezed,
     Object? flutterRepoList = freezed,
+    Object? errorMessage = freezed,
   }) {
     return _then(_$FlutterRepoStateImpl(
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as ApiStatus?,
+      fetchStatus: freezed == fetchStatus
+          ? _value.fetchStatus
+          : fetchStatus // ignore: cast_nullable_to_non_nullable
+              as ApiStatus?,
       flutterRepoList: freezed == flutterRepoList
           ? _value._flutterRepoList
           : flutterRepoList // ignore: cast_nullable_to_non_nullable
               as List<FlutterRepoResponse>?,
+      errorMessage: freezed == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -123,12 +168,17 @@ class __$$FlutterRepoStateImplCopyWithImpl<$Res>
 class _$FlutterRepoStateImpl implements _FlutterRepoState {
   _$FlutterRepoStateImpl(
       {this.status = const ApiStatus.loading(),
-      final List<FlutterRepoResponse>? flutterRepoList})
+      this.fetchStatus = const ApiStatus.loaded(),
+      final List<FlutterRepoResponse>? flutterRepoList,
+      this.errorMessage})
       : _flutterRepoList = flutterRepoList;
 
   @override
   @JsonKey()
   final ApiStatus? status;
+  @override
+  @JsonKey()
+  final ApiStatus? fetchStatus;
   final List<FlutterRepoResponse>? _flutterRepoList;
   @override
   List<FlutterRepoResponse>? get flutterRepoList {
@@ -140,8 +190,11 @@ class _$FlutterRepoStateImpl implements _FlutterRepoState {
   }
 
   @override
+  final String? errorMessage;
+
+  @override
   String toString() {
-    return 'FlutterRepoState(status: $status, flutterRepoList: $flutterRepoList)';
+    return 'FlutterRepoState(status: $status, fetchStatus: $fetchStatus, flutterRepoList: $flutterRepoList, errorMessage: $errorMessage)';
   }
 
   @override
@@ -150,13 +203,17 @@ class _$FlutterRepoStateImpl implements _FlutterRepoState {
         (other.runtimeType == runtimeType &&
             other is _$FlutterRepoStateImpl &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.fetchStatus, fetchStatus) ||
+                other.fetchStatus == fetchStatus) &&
             const DeepCollectionEquality()
-                .equals(other._flutterRepoList, _flutterRepoList));
+                .equals(other._flutterRepoList, _flutterRepoList) &&
+            (identical(other.errorMessage, errorMessage) ||
+                other.errorMessage == errorMessage));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, status,
-      const DeepCollectionEquality().hash(_flutterRepoList));
+  int get hashCode => Object.hash(runtimeType, status, fetchStatus,
+      const DeepCollectionEquality().hash(_flutterRepoList), errorMessage);
 
   @JsonKey(ignore: true)
   @override
@@ -168,14 +225,19 @@ class _$FlutterRepoStateImpl implements _FlutterRepoState {
 
 abstract class _FlutterRepoState implements FlutterRepoState {
   factory _FlutterRepoState(
-          {final ApiStatus? status,
-          final List<FlutterRepoResponse>? flutterRepoList}) =
-      _$FlutterRepoStateImpl;
+      {final ApiStatus? status,
+      final ApiStatus? fetchStatus,
+      final List<FlutterRepoResponse>? flutterRepoList,
+      final String? errorMessage}) = _$FlutterRepoStateImpl;
 
   @override
   ApiStatus? get status;
   @override
+  ApiStatus? get fetchStatus;
+  @override
   List<FlutterRepoResponse>? get flutterRepoList;
+  @override
+  String? get errorMessage;
   @override
   @JsonKey(ignore: true)
   _$$FlutterRepoStateImplCopyWith<_$FlutterRepoStateImpl> get copyWith =>
