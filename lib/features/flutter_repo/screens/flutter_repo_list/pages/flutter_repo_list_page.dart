@@ -102,6 +102,7 @@ class _FlutterRepoListPageState extends State<FlutterRepoListPage> {
                         return GestureDetector(
                           onTap: () => navigationDelegate(repo),
                           child: card(
+                            scrollController: scroll,
                             name: repo?.fullName ?? '-',
                             description: repo?.description ?? '-',
                           ),
@@ -148,12 +149,14 @@ class _FlutterRepoListPageState extends State<FlutterRepoListPage> {
 }
 
 Widget card({
+  required ScrollController scrollController,
   String? name,
   String? description,
 }) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10),
     child: FadeTranslateWidget(
+      controller: scrollController,
       offset: const Offset(0, 100),
       animationDuration: 750,
       delay: 200,
