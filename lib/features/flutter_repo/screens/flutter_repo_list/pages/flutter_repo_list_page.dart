@@ -90,11 +90,6 @@ class _FlutterRepoListPageState extends ConsumerState<FlutterRepoListPage> {
                 child: InfiniteScrolling(
                   scrollController: scroll,
                   itemsLoading: showLoading,
-                  // loadItems: () async =>
-                  //     ((state.flutterRepoList?.length ?? 0) <= 10)
-                  //         ? loadMoreItems()
-                  //         : null,
-
                   loadItems: () async => loadMoreItems(),
                   child: ListView.builder(
                     cacheExtent: 64,
@@ -109,6 +104,7 @@ class _FlutterRepoListPageState extends ConsumerState<FlutterRepoListPage> {
                       return GestureDetector(
                         onTap: () => navigationDelegate(repo),
                         child: card(
+                          delay: (index < 9) ? 200 + (index * 100) : 200,
                           name: repo?.fullName ?? '-',
                           description: repo?.description ?? '-',
                         ),
@@ -154,6 +150,7 @@ class _FlutterRepoListPageState extends ConsumerState<FlutterRepoListPage> {
 }
 
 Widget card({
+  int? delay,
   String? name,
   String? description,
 }) {
@@ -162,7 +159,7 @@ Widget card({
     child: FadeTranslateWidget(
       offset: const Offset(0, 100),
       animationDuration: 750,
-      delay: 200,
+      delay: delay ?? 200,
       child: RoundedBorderedContainer(
         width: 0.5,
         child: Padding(
