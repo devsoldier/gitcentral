@@ -14,7 +14,7 @@ customDialog({
       return AlertDialog(
         elevation: 0,
         // backgroundColor: Colors.white,
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         title: Text(title ?? ''),
         content: (highlightedText != null)
             ? RichText(
