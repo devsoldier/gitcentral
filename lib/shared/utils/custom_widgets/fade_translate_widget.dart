@@ -8,14 +8,12 @@ class FadeTranslateWidget extends StatefulWidget {
   final Offset? offset;
   final int? animationDuration;
   final int? delay;
-  final ScrollController controller;
   const FadeTranslateWidget({
     Key? key,
     this.child,
     this.offset,
     this.animationDuration,
     this.delay,
-    required this.controller,
   }) : super(key: key);
 
   @override
