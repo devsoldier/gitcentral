@@ -80,7 +80,7 @@ class RoundedBorderedContainer extends StatelessWidget {
     return Container(
       alignment: alignment,
       decoration: BoxDecoration(
-        color: backgroundColor ?? Theme.of(context).colorScheme.background,
+        color: backgroundColor ?? Theme.of(context).colorScheme.surface,
         border: Border.all(
             color: borderColor ?? kPrimaryColor, width: borderWidth ?? 2.0),
         borderRadius: BorderRadius.all(
