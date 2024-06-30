@@ -18,9 +18,10 @@ const Color kBackgroundColor = Colors.white;
 const kPrimaryFont = 'Montserrat';
 
 ThemeData get kAppLightTheme {
-  ThemeData base = ThemeData.light();
-  return base.copyWith(
+  ThemeData base = ThemeData.light(
     useMaterial3: true,
+  );
+  return base.copyWith(
     splashColor: Colors.transparent,
     primaryColor: kPrimaryColor,
     colorScheme: buildColorScheme(base.colorScheme),
