@@ -38,7 +38,7 @@ ThemeData get kAppLightTheme {
     elevatedButtonTheme: buildElevatedButtonTheme(),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: ButtonStyle(
-        shape: MaterialStateProperty.all(
+        shape: WidgetStateProperty.all(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))),
       ),
     ),
@@ -71,7 +71,7 @@ ColorScheme buildColorScheme(ColorScheme colorScheme) {
     error: Colors.red,
     primary: kPrimaryColor,
     secondary: kSecondaryColor,
-    background: Colors.white,
+    surface: Colors.white,
     onPrimary: Colors.white,
   );
 }
@@ -219,33 +219,33 @@ buildDiaLogTheme() {
 
 buildSwitchTheme() {
   return SwitchThemeData(
-    thumbColor: MaterialStateProperty.resolveWith<Color?>(
-      (Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected)) {
+    thumbColor: WidgetStateProperty.resolveWith<Color?>(
+      (Set<WidgetState> states) {
+        if (states.contains(WidgetState.selected)) {
           return kPrimaryColor;
         }
         return Colors.grey;
       },
     ),
-    overlayColor: MaterialStateProperty.resolveWith<Color?>(
-      (Set<MaterialState> states) {
-        if (!states.contains(MaterialState.selected)) {
+    overlayColor: WidgetStateProperty.resolveWith<Color?>(
+      (Set<WidgetState> states) {
+        if (!states.contains(WidgetState.selected)) {
           return Colors.grey;
         }
         return kPrimaryColor;
       },
     ),
-    trackOutlineColor: MaterialStateProperty.resolveWith<Color?>(
-      (Set<MaterialState> states) {
-        if (!states.contains(MaterialState.selected)) {
+    trackOutlineColor: WidgetStateProperty.resolveWith<Color?>(
+      (Set<WidgetState> states) {
+        if (!states.contains(WidgetState.selected)) {
           return kGreyShadeLight;
         }
         return kSecondaryColor;
       },
     ),
-    trackColor: MaterialStateProperty.resolveWith<Color?>(
-      (Set<MaterialState> states) {
-        if (!states.contains(MaterialState.selected)) {
+    trackColor: WidgetStateProperty.resolveWith<Color?>(
+      (Set<WidgetState> states) {
+        if (!states.contains(WidgetState.selected)) {
           return kGreyShadeLight;
         }
         return kSecondaryColor;
