@@ -104,7 +104,7 @@ class _FlutterRepoSearchResultState
                   return GestureDetector(
                     onTap: () => navigationDelegate(searchResult),
                     child: card(
-                      scrollController: scroll,
+                      // scrollController: scroll,
                       name: searchResult?.fullName ?? '-',
                       description: searchResult?.description ?? '-',
                     ),
