@@ -28,17 +28,19 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton>
   double horizontalPadding = 8.0;
   Offset offset = const Offset(5, 5);
 
-  Future<void> onPressed() async {
-    if (!mounted) return;
-    setState(() {
-      isPressed = !isPressed;
-    });
+  static const animationDuration = Duration(milliseconds: 100);
 
-    await Future.delayed(const Duration(milliseconds: 100));
+  Future<void> pressedOrReleaseAnimation() async {
     if (!mounted) return;
     setState(() {
       isPressed = !isPressed;
     });
+    await Future.delayed(animationDuration);
+  }
+
+  Future<void> onTap() async {
+    await pressedOrReleaseAnimation();
+    await pressedOrReleaseAnimation();
   }
 
   @override
@@ -75,24 +77,34 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton>
             AnimatedPositioned(
               top: isPressed ? offset.dx : 0,
               left: isPressed ? offset.dy : 0,
-              duration: const Duration(milliseconds: 100),
+              duration: animationDuration,
               child: SizedBox(
                 height: 53,
                 width:
                     widget.width ?? screenWidth * (widget.widthFactor ?? 1.0),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-                  child: ElevatedButton(
-                    style: widget.style,
-                    onPressed: (widget.onPressed != null)
-                        ? () async {
-                            await onPressed();
-                            if (widget.onPressed != null) {
+                  child: GestureDetector(
+                    onTapDown: (_) async {
+                      await pressedOrReleaseAnimation();
+                    },
+                    onTapUp: (_) async {
+                      await pressedOrReleaseAnimation();
+                    },
+                    onTapCancel: () async {
+                      await pressedOrReleaseAnimation();
+                    },
+                    child: ElevatedButton(
+                      style: widget.style,
+                      onPressed: (widget.onPressed != null)
+                          ? () async {
+                              await onTap();
+                              if (widget.onPressed == null) return;
                               widget.onPressed!();
                             }
-                          }
-                        : null,
-                    child: widget.child,
+                          : null,
+                      child: widget.child,
+                    ),
                   ),
                 ),
               ),
