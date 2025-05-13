@@ -2,5 +2,5 @@
 
 - Two branches, main(riverpod) and bloc
 - OAuth
-- Infinite loading
+- Pagination
 - 3D button
