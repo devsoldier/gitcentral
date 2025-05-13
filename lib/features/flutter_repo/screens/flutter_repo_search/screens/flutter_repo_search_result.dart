@@ -81,25 +81,17 @@ class _FlutterRepoSearchResultState extends State<FlutterRepoSearchResult> {
 
     return BlocListener<FlutterRepoSearchBloc, FlutterRepoState>(
       listener: (context, state) {
-        if (state.fetchStatus is ApiLoading) {
-          if (!mounted) return;
-          setState(() {
-            showLoading = true;
-          });
-        } else {
-          setState(() {
-            showLoading = false;
-          });
-          if (state.fetchStatus is ApiServerError) {
-            if (!mounted) return;
-            showWarningSnackBar(context,
-                message: state.errorMessage ?? 'Failed to fetch');
-          }
-          if (state.fetchStatus is ApiOtherException) {
-            if (!mounted) return;
-            showWarningSnackBar(context,
-                message: state.errorMessage ?? 'Something Went Wrong');
-          }
+        if (!mounted) return;
+
+        final errorMessages = {
+          ApiServerError: 'Failed to fetch',
+          ApiOtherException: 'Something Went Wrong'
+        };
+
+        final statusType = state.fetchStatus.runtimeType;
+        if (errorMessages.containsKey(statusType)) {
+          showWarningSnackBar(context,
+              message: state.errorMessage ?? errorMessages[statusType]!);
         }
       },
       child: Stack(
@@ -112,10 +104,7 @@ class _FlutterRepoSearchResultState extends State<FlutterRepoSearchResult> {
                   .add(SearchRepo(query: widget.textController?.text)),
               child: InfiniteScrolling(
                 scrollController: scroll,
-                itemsLoading: showLoading,
-                // loadItems: () async => ((state.flutterRepoList?.length ?? 0) > 10)
-                //     ? loadMoreItems()
-                //     : null,
+                itemsLoading: state.status is ApiLoading,
                 loadItems: () async => context
                     .read<FlutterRepoSearchBloc>()
                     .add(FetchMoreSearchItems(
