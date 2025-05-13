@@ -30,44 +30,7 @@ class FlutterRepoSearchResult extends StatefulWidget {
 }
 
 class _FlutterRepoSearchResultState extends State<FlutterRepoSearchResult> {
-  // FlutterRepoSearchNotifier get flutterSearchRepoNotifier =>
-  //     ref.read(flutterRepoSearchNotifierProvider.notifier);
   final scroll = ScrollController();
-  bool showLoading = false;
-
-  // void loadMoreItems() async {
-  //   if (!mounted) return;
-  //   setState(() {
-  //     showLoading = true;
-  //   });
-  //   final result = await flutterSearchRepoNotifier.mapEventsToState(
-  //       search.FetchMoreItems(query: widget.textController?.text));
-
-  //   if (result.result == false) {
-  //     if (result.errorMessage != null ||
-  //         (result.errorMessage ?? '').isNotEmpty) {
-  //       if (!mounted) return;
-  //       showErrorSnackBar(context, message: result.errorMessage);
-  //     } else {
-  //       if (!mounted) return;
-  //       showErrorSnackBar(context);
-  //     }
-  //   } else if (result.result == null) {
-  //     if (result.errorMessage != null ||
-  //         (result.errorMessage ?? '').isNotEmpty) {
-  //       if (!mounted) return;
-  //       showWarningSnackBar(context, message: result.errorMessage);
-  //     } else {
-  //       /// Result empty
-  //       /// Do nothing
-  //     }
-  //   }
-
-  //   if (!mounted) return;
-  //   setState(() {
-  //     showLoading = false;
-  //   });
-  // }
 
   void navigationDelegate(FlutterRepoResponse? repo) {
     Navigator.of(context).push(
