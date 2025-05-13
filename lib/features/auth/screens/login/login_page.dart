@@ -9,7 +9,6 @@ import 'package:gitcentral/features/auth/screens/login_webview/github_auth_webvi
 import 'package:gitcentral/shared/utils/constants/constants.dart';
 import 'package:gitcentral/shared/utils/custom_widgets/custom_elevated_button.dart';
 import 'package:gitcentral/shared/utils/custom_widgets/custom_snackbars.dart';
-import 'package:gitcentral/shared/utils/custom_widgets/measure_size.dart';
 import 'package:gitcentral/shared/utils/themes/light_theme.dart';
 
 class LoginPage extends StatefulWidget {
@@ -83,44 +82,36 @@ class _LoginPageState extends State<LoginPage> {
           body: Stack(
             children: [
               Center(
-                child: MeasureSize(
-                  onChange: (size) {
-                    if (!mounted) return;
-                    setState(() {
-                      buttonWidth = size.width;
-                    });
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      AnimatedOpacity(
-                        duration: opacityDuration,
-                        opacity: (animateOpacity) ? 1 : 0,
-                        child: CustomElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: kBackgroundColor,
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Image.asset(
-                                  height: 50,
-                                  'assets/images/github_vector.png',
-                                ),
-                              ),
-                              const Text(
-                                'Login With GitHub',
-                              ),
-                            ],
-                          ),
-                          onPressed: () async => navigationDelegate(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AnimatedOpacity(
+                      duration: opacityDuration,
+                      opacity: (animateOpacity) ? 1 : 0,
+                      child: CustomElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: kBackgroundColor,
                         ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Image.asset(
+                                height: 50,
+                                'assets/images/github_vector.png',
+                              ),
+                            ),
+                            const Text(
+                              'Login With GitHub',
+                            ),
+                          ],
+                        ),
+                        onPressed: () async => navigationDelegate(),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ],

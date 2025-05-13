@@ -148,15 +148,18 @@ class _FlutterRepoListPageState extends State<FlutterRepoListPage> {
 }
 
 Widget card({
+  // required ScrollController scrollController,
+  int? delay,
   String? name,
   String? description,
 }) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10),
     child: FadeTranslateWidget(
+      // controller: scrollController,
       offset: const Offset(0, 100),
       animationDuration: 750,
-      delay: 200,
+      delay: delay ?? 200,
       child: RoundedBorderedContainer(
         width: 0.5,
         child: Padding(
