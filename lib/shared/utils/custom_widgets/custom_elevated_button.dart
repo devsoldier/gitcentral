@@ -3,6 +3,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
+enum ButtonEvent { pressed, released }
+
 class CustomElevatedButton extends StatefulWidget {
   final void Function()? onPressed;
   final Widget child;
@@ -28,17 +30,17 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton>
 
   static const animationDuration = Duration(milliseconds: 100);
 
-  Future<void> pressedOrReleaseAnimation() async {
+  Future<void> pressedOrReleaseAnimation(ButtonEvent event) async {
     if (!mounted) return;
     setState(() {
-      isPressed = !isPressed;
+      isPressed = event == ButtonEvent.pressed;
     });
     await Future.delayed(animationDuration);
   }
 
   Future<void> onTap() async {
-    await pressedOrReleaseAnimation();
-    await pressedOrReleaseAnimation();
+    await pressedOrReleaseAnimation(ButtonEvent.pressed);
+    await pressedOrReleaseAnimation(ButtonEvent.released);
   }
 
   @override
@@ -83,10 +85,12 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton>
                     padding:
                         EdgeInsets.symmetric(horizontal: horizontalPadding),
                     child: GestureDetector(
-                      onTapDown: (_) async => await pressedOrReleaseAnimation(),
-                      onTapUp: (_) async => await pressedOrReleaseAnimation(),
+                      onTapDown: (_) async =>
+                          await pressedOrReleaseAnimation(ButtonEvent.pressed),
+                      onTapUp: (_) async =>
+                          await pressedOrReleaseAnimation(ButtonEvent.released),
                       onTapCancel: () async =>
-                          await pressedOrReleaseAnimation(),
+                          await pressedOrReleaseAnimation(ButtonEvent.released),
                       child: ElevatedButton(
                         style: widget.style,
                         onPressed: (widget.onPressed != null)
