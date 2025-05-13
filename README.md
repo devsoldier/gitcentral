@@ -1,6 +1,6 @@
 # gitcentral
 
-- Two branch main(riverpod) and bloc
+- Two branches, main(riverpod) and bloc
 - OAuth
 - Infinite loading
 - 3D button
